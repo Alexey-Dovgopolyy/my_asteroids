@@ -1,0 +1,7 @@
+#files
+*.pro.user
+
+#directories
+debug/
+release/
+build/
