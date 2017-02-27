@@ -1,1 +1,1 @@
-# my_steroinds
+# my_asteroids
