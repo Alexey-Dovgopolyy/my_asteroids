@@ -41,10 +41,10 @@ void Aircraft::updateDirection(sf::Vector2i mousePos)
 
 void Aircraft::updateCoordinates(float x, float y)
 {
-    //qDebug() << x << " " << y;
-    if (abs(x) < 0.05f) {
+    //qDebug() << x << " " << y << fabs(x);
+    if (fabs(x) < 0.05f) {
         mVelocity.x > 0 ? mVelocity.x -= 0.05f : mVelocity.x += 0.05f;
-        if (abs(mVelocity.x) <= 0.05f) {
+        if (fabs(mVelocity.x) <= 0.05f) {
             mVelocity.x = 0;
         }
         //qDebug() << mVelocity.x;
@@ -54,9 +54,9 @@ void Aircraft::updateCoordinates(float x, float y)
 
     }
 
-    if (abs(y) < 0.05) {
+    if (fabs(y) < 0.05f) {
         mVelocity.y > 0 ? mVelocity.y -= 0.05f : mVelocity.y += 0.05f;
-        if (abs(mVelocity.y) <= 0.05f) {
+        if (fabs(mVelocity.y) <= 0.05f) {
             mVelocity.y = 0;
         }
     }

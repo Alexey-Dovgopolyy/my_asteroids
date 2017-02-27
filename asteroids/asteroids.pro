@@ -14,7 +14,11 @@ SOURCES += main.cpp \
     utility.cpp \
     application.cpp \
     world.cpp \
-    playersinput.cpp
+    playersinput.cpp \
+    scenenode.cpp \
+    entity.cpp \
+    command.cpp \
+    commandqueue.cpp
 
 
 
@@ -24,8 +28,14 @@ HEADERS += \
     utility.h \
     application.h \
     world.h \
-    playersinput.h
+    playersinput.h \
+    scenenode.h \
+    entity.h \
+    category.h \
+    command.h \
+    commandqueue.h
 
+win32 {
 
 LIBS += -LD:\SFML-2.4.0\lib
 
@@ -34,3 +44,17 @@ CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-ma
 
 INCLUDEPATH += D:\SFML-2.4.0\include
 DEPENDPATH += D:\SFML-2.4.0\include
+}
+
+unix {
+
+LIBS += -L"/SFML/lib"
+
+CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(debug, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+
+INCLUDEPATH += "/SFML/include"
+DEPENDPATH += "/SFML/include"
+
+
+}
