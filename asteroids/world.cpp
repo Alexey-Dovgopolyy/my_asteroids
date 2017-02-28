@@ -2,76 +2,47 @@
 #include <QDebug>
 #include <algorithm>
 
-World::World(sf::RenderWindow *window)
-    : mWindow(window)
-    , mWorldView(window->getDefaultView())
+const float worldMargine = 20.f;
+
+World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
+    : mTarget(outputTarget)
+, mWorldView(outputTarget.getDefaultView())
+, mTextures()
+, mFonts(fonts)
+, mSceneGraph()
+, mSceneLayer()
+, mWorldBounds(-worldMargine, -worldMargine,
+               mWorldView.getSize().x + worldMargine,
+               mWorldView.getSize().y + worldMargine)
+, mSpawnPosition(mWorldView.getSize().x / 2.f,
+                 mWorldView.getSize().y / 2.f)
+, mPlayerAircraft(nullptr)
 {
-    mPlayerAircraft.setCoordinates(window->getSize().x / 2.f,
-                                   window->getSize().y / 2.f);
-    qDebug() << "World init" << mWorldView.getSize().x << " " << mWorldView.getSize().y;
-    qDebug() << "Player init" << mPlayerAircraft.getCoordinates().x << " " <<
-                mPlayerAircraft.getCoordinates().y;
+
 }
 
-void World::update(sf::Time dt)
+void World::buildScene()
 {
-    handleInput();
-    handleRealTimeInput(dt);
-    adaptPlayerPosition();
+    for (std::size_t i = 0; i < LayerCount; ++i) {
+
+        Category::Type category = (i == LowerAir) ?
+                    Category::SceneAirLayer : Category::None;
+        SceneNode::Ptr layer(new SceneNode(category));
+        mSceneLayer[i] = layer.get();
+        mSceneGraph.attachChild(std::move(layer));
+    }
+
+    sf::Texture& spaceTexture = mTextures.get(Textures::Space);
+    std::unique_ptr<SpriteNode> spaceSprite(new SpriteNode(spaceTexture));
+    spaceSprite->setPosition(0.f, 0.f);
+    mSceneLayer[Background]->attachChild(std::move(spaceSprite));
+
+
+
 }
 
-void World::draw()
+void World::loadTextures()
 {
-    mWindow->draw(mPlayerAircraft);
-}
-
-void World::handleInput()
-{
-    sf::Event event;
-    while (mWindow->pollEvent(event)) {
-
-        if (event.type == sf::Event::Closed)
-        mWindow->close();
-
-    }
-}
-
-void World::handleRealTimeInput(sf::Time dt)
-{
-    float x = 0;
-    float y = 0;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        y = -0.05f;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        y = 0.05f;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        x = -0.05f;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        x = 0.05f;
-    }
-    mPlayerAircraft.updateCoordinates(x, y);
-
-    //qDebug() << x << " " << y;
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(*mWindow);
-    mPlayerAircraft.updateDirection(mousePosition);    
-}
-
-void World::adaptPlayerPosition()
-{
-    sf::Vector2f worldViewSize = mWorldView.getSize();
-    sf::Vector2f playersCoords = mPlayerAircraft.getCoordinates();
-
-    //qDebug() << "World" << worldViewSize.x << " " << worldViewSize.y;
-    //qDebug() << "Player" << playersCoords.x << " " << playersCoords.y;
-
-    if (playersCoords.x > worldViewSize.x + 20.f)  playersCoords.x = 0.f - 20.f;
-    if (playersCoords.x < 0.f - 20.f)              playersCoords.x = worldViewSize.x + 20.f;
-    if (playersCoords.y > worldViewSize.y + 20.f)  playersCoords.y = 0.f - 20.f;
-    if (playersCoords.y < 0.f - 20.f)              playersCoords.y = worldViewSize.y + 20.f;
-
-    mPlayerAircraft.setCoordinates(playersCoords.x, playersCoords.y);
+    mTextures.load(Textures::Space, "Media/Textures/Space.jpg");
+    mTextures.load(Textures::Eagle, "Media/Textures/Eagle.png");
 }

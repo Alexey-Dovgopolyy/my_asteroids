@@ -12,14 +12,10 @@
 class GameState
 {
 public:
+    GameState();
 
-    GameState(sf::RenderWindow* renderContext);
-    bool update(sf::Time dt);
-    void draw();
 
 private:
-    World               mWorld;
-    sf::RenderWindow*   mContext;
 };
 
 #endif // GAMESTATE_H

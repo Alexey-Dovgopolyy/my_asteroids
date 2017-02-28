@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     scenenode.cpp \
     entity.cpp \
     command.cpp \
-    commandqueue.cpp
+    commandqueue.cpp \
+    spritenode.cpp
 
 
 
@@ -33,7 +34,10 @@ HEADERS += \
     entity.h \
     category.h \
     command.h \
-    commandqueue.h
+    commandqueue.h \
+    resouceholder.h \
+    resourceidentifiers.h \
+    spritenode.h
 
 win32 {
 

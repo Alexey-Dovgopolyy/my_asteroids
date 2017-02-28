@@ -4,7 +4,6 @@ const sf::Time Application::TimePerFrame = sf::seconds(1.f/60.f);
 
 Application::Application()
     : mWindow(sf::VideoMode(800, 600), "Test")
-    , mStateStack(&mWindow)
     , mStatisticsText()
     , mStatisticsUpdateTime()
     , mStatisticsNumFrames(0)
@@ -31,11 +30,11 @@ void Application::run()
             update(TimePerFrame);
 
 
-//            sf::Event event;
-//            while (mWindow.pollEvent(event)) {
-//                if (event.type == sf::Event::Closed)
-//                mWindow.close();
-//            }
+            sf::Event event;
+            while (mWindow.pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                mWindow.close();
+            }
             // Check inside this loop, because stack might be empty before update() call
 //			if (mStateStack.isEmpty())
 //				mWindow.close();
@@ -53,13 +52,13 @@ void Application::processInput()
 
 void Application::update(sf::Time dt)
 {
-    mStateStack.update(dt);
+    //mStateStack.update(dt);
 }
 
 void Application::render()
 {
     mWindow.clear();
-    mStateStack.draw();
+    //mStateStack.draw();
     mWindow.draw(mStatisticsText);
     mWindow.display();
 }

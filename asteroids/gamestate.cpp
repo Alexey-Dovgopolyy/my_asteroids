@@ -2,19 +2,8 @@
 
 
 
-GameState::GameState(sf::RenderWindow *renderContext)
-    : mWorld(renderContext)
+GameState::GameState()
 {
 
 }
 
-bool GameState::update(sf::Time dt)
-{
-    mWorld.update(dt);
-    return true;
-}
-
-void GameState::draw()
-{
-    mWorld.draw();
-}
