@@ -32,7 +32,7 @@ public:
 
     void            handleEvent(const sf::Event& event,
                                 CommandQueue& commands);
-    void            handleRealtimeInput(CommandQueue& command);
+    void            handleRealtimeInput(CommandQueue& commands);
 
     void            setMissionStatus(MissionStatus status);
     MissionStatus   getMissionStatus() const;

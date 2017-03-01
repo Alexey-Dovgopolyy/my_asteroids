@@ -1,5 +1,6 @@
 #include "playersinput.h"
 #include "aircraft.h"
+#include "commandqueue.h"
 
 struct AircraftMover {
 
@@ -37,9 +38,15 @@ void PlayersInput::handleEvent(const sf::Event& event,
 
 }
 
-void PlayersInput::handleRealtimeInput(CommandQueue& command)
+void PlayersInput::handleRealtimeInput(CommandQueue& commands)
 {
+    for (auto pair : mKeyBinding) {
 
+        if (sf::Keyboard::isKeyPressed(pair.first) &&
+                isRealtimeAction(pair.second)) {
+            commands.push(mActionBinding[pair.second]);
+        }
+    }
 }
 
 void PlayersInput::setMissionStatus(MissionStatus status)
@@ -58,11 +65,11 @@ void PlayersInput::initializeActions()
     mActionBinding[MoveRight].action = derivedAction<Aircraft>(AircraftMover(+1,  0));
     mActionBinding[MoveUp].action    = derivedAction<Aircraft>(AircraftMover( 0, -1));
     mActionBinding[MoveDown].action  = derivedAction<Aircraft>(AircraftMover( 0, +1));
-    mActionBinding[Fire].action      = derivedAction<Aircraft>(
-                                    [] (Aircraft& a, sf::Time)
-                                    {
-                                        //a.fire();
-                                    });
+//    mActionBinding[Fire].action      = derivedAction<Aircraft>(
+//                                    [] (Aircraft& a, sf::Time)
+//                                    {
+//                                        a.fire();
+//                                    });
 
 }
 

@@ -29,12 +29,6 @@ void Application::run()
             processInput();
             update(TimePerFrame);
 
-
-            sf::Event event;
-            while (mWindow.pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                mWindow.close();
-            }
             // Check inside this loop, because stack might be empty before update() call
 //			if (mStateStack.isEmpty())
 //				mWindow.close();
@@ -47,7 +41,11 @@ void Application::run()
 
 void Application::processInput()
 {
-
+    sf::Event event;
+    while (mWindow.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+        mWindow.close();
+    }
 }
 
 void Application::update(sf::Time dt)
