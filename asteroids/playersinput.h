@@ -7,6 +7,8 @@
 
 #include <map>
 
+class CommandQueue;
+
 class PlayersInput
 {
 public:

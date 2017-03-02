@@ -6,16 +6,24 @@
 
 #include <QDebug>
 
-#include "aircraft.h"
+#include "state.h"
 #include "world.h"
+#include "playersinput.h"
 
-class GameState
+
+class GameState : public State
 {
 public:
-    GameState();
+    GameState(StateStack& stack, Context context);
+
+    void draw();
+    bool update(sf::Time dt);
+    bool handleEvent(const sf::Event &event);
 
 
 private:
+    World           mWorld;
+    PlayersInput&   mPlayer;
 };
 
 #endif // GAMESTATE_H

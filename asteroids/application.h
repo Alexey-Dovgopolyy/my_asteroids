@@ -1,8 +1,10 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "resouceholder.h"
 #include "gamestate.h"
 #include "playersinput.h"
+#include "statestack.h"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -11,29 +13,30 @@
 class Application
 {
 public:
-    Application();
-    void run();
+            Application();
+    void    run();
 
 private:
-    void processInput();
-    void update(sf::Time dt);
-    void render();
+    void    processInput();
+    void    update(sf::Time dt);
+    void    render();
 
-    void updateStatistics(sf::Time dt);
+    void    updateStatistics(sf::Time dt);
+    void    registerStates();
 
 private:
     static const sf::Time   TimePerFrame;
 
-    sf::Font                mFont;
     sf::RenderWindow        mWindow;
+    TextureHolder           mTextures;
+    FontHolder              mFonts;
+    PlayersInput            mPlayersInput;
 
-    GameState               mStateStack;
+    StateStack              mStateStack;
+
     sf::Text                mStatisticsText;
     sf::Time                mStatisticsUpdateTime;
     std::size_t             mStatisticsNumFrames;
-
-    PlayersInput            mPlayersInput;
-
 };
 
 #endif // APPLICATION_H

@@ -19,7 +19,9 @@ SOURCES += main.cpp \
     entity.cpp \
     command.cpp \
     commandqueue.cpp \
-    spritenode.cpp
+    spritenode.cpp \
+    state.cpp \
+    statestack.cpp
 
 
 
@@ -37,7 +39,10 @@ HEADERS += \
     commandqueue.h \
     resouceholder.h \
     resourceidentifiers.h \
-    spritenode.h
+    spritenode.h \
+    state.h \
+    statestack.h \
+    stateidentifiers.h
 
 win32 {
 

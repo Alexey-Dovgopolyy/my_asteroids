@@ -10,7 +10,7 @@ class SpriteNode : public SceneNode
 public:
     SpriteNode(const sf::Texture& texture);
     SpriteNode(const sf::Texture& texture,
-               sf::IntRect textureRect);
+               sf::IntRect &textureRect);
 
 private:
     virtual void drawCurrent(sf::RenderTarget& target,

@@ -18,7 +18,24 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
                  mWorldView.getSize().y / 2.f)
 , mPlayerAircraft(nullptr)
 {
+    loadTextures();
+    buildScene();
+}
 
+void World::update(sf::Time dt)
+{
+    mSceneGraph.update(dt, mCommandQueue);
+}
+
+void World::draw()
+{
+    mTarget.setView(mWorldView);
+    mTarget.draw(mSceneGraph);
+}
+
+CommandQueue& World::getCommandQueue()
+{
+    return mCommandQueue;
 }
 
 void World::buildScene()
@@ -36,8 +53,6 @@ void World::buildScene()
     std::unique_ptr<SpriteNode> spaceSprite(new SpriteNode(spaceTexture));
     spaceSprite->setPosition(0.f, 0.f);
     mSceneLayer[Background]->attachChild(std::move(spaceSprite));
-
-
 
 }
 

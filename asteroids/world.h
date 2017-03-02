@@ -16,7 +16,13 @@
 class World
 {
 public:
-    World(sf::RenderTarget& outputTarget, FontHolder& fonts);
+                    World(sf::RenderTarget& outputTarget,
+                          FontHolder& fonts);
+
+    void            update(sf::Time dt);
+    void            draw();
+
+    CommandQueue&   getCommandQueue();
 
 private:
     void buildScene();
