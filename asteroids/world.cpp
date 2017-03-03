@@ -97,6 +97,9 @@ void World::adaptPlayerVelocity()
     static sf::Vector2f previousVelocity = sf::Vector2f(0, 0);
     sf::Vector2f currentVelocity = mPlayerAircraft->getVelocity();
 
+    // TO DO
+    // Need to recalculate velocity for different angles
+
     // velocity correction
     if (abs(currentVelocity.x) < 2.f) currentVelocity.x = 0.f;
     if (abs(currentVelocity.y) < 2.f) currentVelocity.y = 0.f;
