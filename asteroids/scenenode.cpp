@@ -7,6 +7,8 @@
 #include <cassert>
 #include <algorithm>
 
+#include <QDebug>
+
 SceneNode::SceneNode(Category::Type category)
     : mChildren()
     , mParent(nullptr)

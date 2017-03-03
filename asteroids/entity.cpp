@@ -1,5 +1,5 @@
 #include "entity.h"
-
+#include <QDebug>
 #include <cassert>
 
 Entity::Entity(int hitpoints)
@@ -70,5 +70,6 @@ bool Entity::isDestroyed() const
 
 void Entity::updateCurrent(sf::Time dt, CommandQueue&)
 {
+    //qDebug() << mVelocity.x << " " << mVelocity.y;
     move(mVelocity * dt.asSeconds());
 }

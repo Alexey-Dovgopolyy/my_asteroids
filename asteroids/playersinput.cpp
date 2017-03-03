@@ -1,6 +1,9 @@
 #include "playersinput.h"
 #include "aircraft.h"
 #include "commandqueue.h"
+#include <QDebug>
+
+#include <SFML/Graphics/RenderWindow.hpp>
 
 struct AircraftMover {
 
@@ -11,14 +14,36 @@ struct AircraftMover {
 
     void operator() (Aircraft& aircraft, sf::Time) const
     {
-        aircraft.setVelocity(velocity);
+        aircraft.accelerate(velocity * 2.f);
     }
 
     sf::Vector2f velocity;
 };
 
-PlayersInput::PlayersInput()
-    : mCurrentMissionStatus(MissionRunning)
+struct AircraftRotor {
+    AircraftRotor(sf::Vector2i mousePos)
+        : mousePosition(mousePos)
+    {
+    }
+
+    void operator() (Aircraft& aircraft, sf::Time) const
+    {
+        float dx = mousePosition.x - aircraft.getPosition().x;
+        float dy = aircraft.getPosition().y - mousePosition.y;
+
+        float angle = std::atan2(dx, dy);
+        float degree = toDegree(angle);
+        //qDebug() << degree;
+
+        aircraft.setRotation(degree);
+    }
+
+    sf::Vector2i mousePosition;
+};
+
+PlayersInput::PlayersInput(sf::RenderTarget &window)
+    : mWindow(window)
+    , mCurrentMissionStatus(MissionRunning)
 {
     mKeyBinding[sf::Keyboard::A] = MoveLeft;
     mKeyBinding[sf::Keyboard::D] = MoveRight;
@@ -47,6 +72,18 @@ void PlayersInput::handleRealtimeInput(CommandQueue& commands)
             commands.push(mActionBinding[pair.second]);
         }
     }
+
+    hanleMouseMoves(commands);
+}
+
+void PlayersInput::hanleMouseMoves(CommandQueue &commands)
+{
+    sf::Vector2i mousePosition =
+            sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(mWindow));
+    Command command;
+    command.category = Category::PlayerAircraft;
+    command.action = derivedAction<Aircraft>(AircraftRotor(mousePosition));
+    commands.push(command);
 }
 
 void PlayersInput::setMissionStatus(MissionStatus status)

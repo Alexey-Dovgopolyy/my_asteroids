@@ -11,7 +11,7 @@ Application::Application()
     : mWindow(sf::VideoMode(800, 600), "Test", sf::Style::Close)
     , mTextures()
     , mFonts()
-    , mPlayersInput()
+    , mPlayersInput(mWindow)
     , mStateStack(State::Context(mWindow, mTextures,
                                  mFonts, mPlayersInput))
     , mStatisticsText()
@@ -60,6 +60,7 @@ void Application::run()
 void Application::processInput()
 {
     sf::Event event;
+
     while (mWindow.pollEvent(event))
     {
         mStateStack.handleEvent(event);

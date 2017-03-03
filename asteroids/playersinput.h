@@ -30,11 +30,12 @@ public:
     };
 
 public:
-    PlayersInput();
+                    PlayersInput(sf::RenderTarget& window);
 
     void            handleEvent(const sf::Event& event,
                                 CommandQueue& commands);
     void            handleRealtimeInput(CommandQueue& commands);
+    void            hanleMouseMoves(CommandQueue& commands);
 
     void            setMissionStatus(MissionStatus status);
     MissionStatus   getMissionStatus() const;
@@ -43,6 +44,8 @@ public:
     bool            isRealtimeAction(Action action);
 
 private:
+    sf::RenderTarget&                   mWindow;
+
     std::map<sf::Keyboard::Key, Action> mKeyBinding;
     std::map<Action, Command>           mActionBinding;
     MissionStatus                       mCurrentMissionStatus;

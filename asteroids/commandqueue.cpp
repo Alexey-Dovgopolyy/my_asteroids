@@ -1,4 +1,5 @@
 #include "commandqueue.h"
+#include <QDebug>
 
 CommandQueue::CommandQueue()
 {
@@ -8,6 +9,7 @@ CommandQueue::CommandQueue()
 void CommandQueue::push(const Command& command)
 {
     mQueue.push(command);
+    //qDebug() << mQueue.size();
 }
 
 Command CommandQueue::pop()

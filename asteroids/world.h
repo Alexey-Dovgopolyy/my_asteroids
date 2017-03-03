@@ -13,6 +13,8 @@
 
 #include <array>
 
+const float maxAircraftSpeed = 140.f;
+
 class World
 {
 public:
@@ -25,8 +27,11 @@ public:
     CommandQueue&   getCommandQueue();
 
 private:
-    void buildScene();
-    void loadTextures();
+    void            buildScene();
+    void            loadTextures();
+
+    void            adaptPlayerPosition();
+    void            adaptPlayerVelocity();
 
 private:
     enum Layer {

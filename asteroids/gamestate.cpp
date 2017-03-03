@@ -1,5 +1,5 @@
 #include "gamestate.h"
-
+#include <QDebug>
 
 
 GameState::GameState(StateStack &stack, Context context)
