@@ -10,6 +10,7 @@
 #include "resouceholder.h"
 #include "resourceidentifiers.h"
 #include "utility.h"
+#include "projectile.h"
 
 class Aircraft : public Entity
 {
@@ -23,11 +24,26 @@ public:
     Aircraft(Type type, const TextureHolder& textures);
 
     virtual unsigned int getCategory() const;
+    virtual sf::FloatRect getBoundingRect() const;
+
+    void        setDirection(float angle);
+    float       getDirection() const;
+
+    void        fire();
 
 private:
     virtual void drawCurrent(sf::RenderTarget& target,
                              sf::RenderStates states) const;
     virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+
+    void        checkProjectileLaunch(sf::Time dt,
+                                        CommandQueue& commands);
+    void        createBullet(SceneNode& node,
+                             const TextureHolder& textures);
+    void        createProjectile(SceneNode& node,
+                                 Projectile::Type type,
+                                 float xOffset, float yOffset,
+                                 const TextureHolder& textures);
 
 private:
     Type                    mType;
@@ -38,7 +54,7 @@ private:
     bool                    mIsFiring;
 
     int                     mFireRateLevel;
-    double                  mDirection;
+    float                   mDirection;
 };
 
 #endif // AIRCRAFT_H

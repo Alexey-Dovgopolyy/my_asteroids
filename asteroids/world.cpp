@@ -3,7 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
-const float worldMargine = 20.f;
+const float worldMargine        = 20.f;
+const float maxAircraftSpeed    = 140.f;
 
 World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
     : mTarget(outputTarget)
@@ -72,8 +73,9 @@ void World::buildScene()
 
 void World::loadTextures()
 {
-    mTextures.load(Textures::Space, "Media/Textures/Space.jpg");
-    mTextures.load(Textures::Eagle, "Media/Textures/Eagle.png");
+    mTextures.load(Textures::Space,     "Media/Textures/Space.jpg");
+    mTextures.load(Textures::Eagle,     "Media/Textures/Eagle.png");
+    mTextures.load(Textures::Entities,  "Media/Textures/Entities.png");
 }
 
 void World::adaptPlayerPosition()
@@ -97,37 +99,21 @@ void World::adaptPlayerVelocity()
     static sf::Vector2f previousVelocity = sf::Vector2f(0, 0);
     sf::Vector2f currentVelocity = mPlayerAircraft->getVelocity();
 
-    // TO DO
-    // Need to recalculate velocity for different angles
-
     // velocity correction
-    if (abs(currentVelocity.x) < 2.f) currentVelocity.x = 0.f;
-    if (abs(currentVelocity.y) < 2.f) currentVelocity.y = 0.f;
+    if (abs(currentVelocity.x) < 1.f) currentVelocity.x = 0.f;
+    if (abs(currentVelocity.y) < 1.f) currentVelocity.y = 0.f;
 
     // check max speed
-    float maxSpeed = 0;
-    if (currentVelocity.x != 0 && currentVelocity.y != 0) {
-        maxSpeed = maxAircraftSpeed / std::sqrt(2.f);
-    }
-    else {
-        maxSpeed = maxAircraftSpeed;
-    }
+    float maxX = maxAircraftSpeed;
+    float maxY = maxAircraftSpeed;
+    float moveDirection = 0.f;
 
-    qDebug() << currentVelocity.x << " " << currentVelocity.y;
-    qDebug() << maxSpeed;
+    moveDirection = std::atan2(currentVelocity.x, currentVelocity.y);
+    //qDebug() << "dir" << toDegree(moveDirection);
+    maxX = abs(maxAircraftSpeed * std::sin(moveDirection));
+    maxY = abs(maxAircraftSpeed * std::cos(moveDirection));
 
-    if (currentVelocity.x > maxSpeed) {
-        currentVelocity.x = maxSpeed;
-    }
-    else if (currentVelocity.x < -maxSpeed) {
-        currentVelocity.x  = -maxSpeed;
-    }
-    if (currentVelocity.y > maxSpeed) {
-        currentVelocity.y = maxSpeed;
-    }
-    else if (currentVelocity.y < -maxSpeed) {
-        currentVelocity.y = -maxSpeed;
-    }
+    dealWithMaxPlayerSpeed(currentVelocity, maxX, maxY);
 
     // reduce velocity if it stays the same
     if (previousVelocity.x == currentVelocity.x) {
@@ -140,4 +126,20 @@ void World::adaptPlayerVelocity()
     //set calculated velocity
     mPlayerAircraft->setVelocity(currentVelocity);
     previousVelocity = currentVelocity;
+}
+
+void World::dealWithMaxPlayerSpeed(sf::Vector2f &current, float maxX, float maxY)
+{
+    if (current.x > maxX) {
+        current.x = maxX;
+    }
+    else if (current.x < -maxX) {
+        current.x = -maxX;
+    }
+    if (current.y > maxY) {
+        current.y = maxY;
+    }
+    else if (current.y < -maxY) {
+        current.y = -maxY;
+    }
 }

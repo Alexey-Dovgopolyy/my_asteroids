@@ -28,6 +28,9 @@ public:
     void            attachChild(Ptr child);
     Ptr             detachChild(const SceneNode& node);
 
+    sf::Vector2f    getWorldPosition() const;
+    sf::Transform   getWorldTransform() const;
+
     void            update(sf::Time dt, CommandQueue& commands);
     void            onCommand(const Command& command, sf::Time dt);
     virtual unsigned int getCategory() const;

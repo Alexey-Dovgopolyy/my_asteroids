@@ -13,7 +13,7 @@
 
 #include <array>
 
-const float maxAircraftSpeed = 140.f;
+
 
 class World
 {
@@ -32,6 +32,7 @@ private:
 
     void            adaptPlayerPosition();
     void            adaptPlayerVelocity();
+    void            dealWithMaxPlayerSpeed(sf::Vector2f& current, float maxX, float maxY);
 
 private:
     enum Layer {

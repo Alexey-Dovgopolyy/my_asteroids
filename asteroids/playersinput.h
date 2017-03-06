@@ -47,6 +47,7 @@ private:
     sf::RenderTarget&                   mWindow;
 
     std::map<sf::Keyboard::Key, Action> mKeyBinding;
+    std::map<sf::Mouse::Button, Action> mMouseKeyBinding;
     std::map<Action, Command>           mActionBinding;
     MissionStatus                       mCurrentMissionStatus;
 };

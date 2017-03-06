@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     commandqueue.cpp \
     spritenode.cpp \
     state.cpp \
-    statestack.cpp
+    statestack.cpp \
+    projectile.cpp
 
 
 
@@ -42,7 +43,8 @@ HEADERS += \
     spritenode.h \
     state.h \
     statestack.h \
-    stateidentifiers.h
+    stateidentifiers.h \
+    projectile.h
 
 win32 {
 

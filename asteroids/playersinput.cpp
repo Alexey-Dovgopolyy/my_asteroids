@@ -35,7 +35,8 @@ struct AircraftRotor {
         float degree = toDegree(angle);
         //qDebug() << degree;
 
-        aircraft.setRotation(degree);
+        aircraft.setDirection(degree);
+        //aircraft.setRotation(degree);
     }
 
     sf::Vector2i mousePosition;
@@ -49,6 +50,8 @@ PlayersInput::PlayersInput(sf::RenderTarget &window)
     mKeyBinding[sf::Keyboard::D] = MoveRight;
     mKeyBinding[sf::Keyboard::W] = MoveUp;
     mKeyBinding[sf::Keyboard::S] = MoveDown;
+
+    mMouseKeyBinding[sf::Mouse::Left] = Fire;
 
     initializeActions();
 
@@ -68,6 +71,14 @@ void PlayersInput::handleRealtimeInput(CommandQueue& commands)
     for (auto pair : mKeyBinding) {
 
         if (sf::Keyboard::isKeyPressed(pair.first) &&
+                isRealtimeAction(pair.second)) {
+            commands.push(mActionBinding[pair.second]);
+        }
+    }
+
+    for (auto pair : mMouseKeyBinding) {
+
+        if (sf::Mouse::isButtonPressed(pair.first) &&
                 isRealtimeAction(pair.second)) {
             commands.push(mActionBinding[pair.second]);
         }
@@ -102,11 +113,11 @@ void PlayersInput::initializeActions()
     mActionBinding[MoveRight].action = derivedAction<Aircraft>(AircraftMover(+1,  0));
     mActionBinding[MoveUp].action    = derivedAction<Aircraft>(AircraftMover( 0, -1));
     mActionBinding[MoveDown].action  = derivedAction<Aircraft>(AircraftMover( 0, +1));
-//    mActionBinding[Fire].action      = derivedAction<Aircraft>(
-//                                    [] (Aircraft& a, sf::Time)
-//                                    {
-//                                        a.fire();
-//                                    });
+    mActionBinding[Fire].action      = derivedAction<Aircraft>(
+                                    [] (Aircraft& a, sf::Time)
+                                    {
+                                        a.fire();
+                                    });
 
 }
 

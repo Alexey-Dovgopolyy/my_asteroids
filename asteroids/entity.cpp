@@ -23,6 +23,7 @@ void Entity::setVelocity(float vx, float vy)
 void Entity::accelerate(sf::Vector2f velocity)
 {
     mVelocity += velocity;
+    //qDebug() << "accel" << mVelocity.x << " " << mVelocity.y;
 }
 
 void Entity::accelerate(float vx, float vy)
