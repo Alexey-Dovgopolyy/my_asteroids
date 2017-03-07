@@ -69,8 +69,32 @@ bool Entity::isDestroyed() const
     return mHitpoints <= 0;
 }
 
+void Entity::setRect(sf::FloatRect rect)
+{
+    mBoundingRect = rect;
+    correctBoundingRect();
+}
+
+sf::FloatRect Entity::getRect() const
+{
+    return mBoundingRect;
+}
+
 void Entity::updateCurrent(sf::Time dt, CommandQueue&)
 {
     //qDebug() << mVelocity.x << " " << mVelocity.y;
     move(mVelocity * dt.asSeconds());
+}
+
+void Entity::correctBoundingRect()
+{
+    float difference = std::abs(mBoundingRect.width - mBoundingRect.height);
+    if (mBoundingRect.width > mBoundingRect.height) {
+        mBoundingRect.left += difference / 2;
+        mBoundingRect.width -= difference;
+    }
+    else {
+        mBoundingRect.top += difference / 2;
+        mBoundingRect.height -= difference;
+    }
 }

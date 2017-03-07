@@ -44,6 +44,7 @@ private:
                                  Projectile::Type type,
                                  float xOffset, float yOffset,
                                  const TextureHolder& textures);
+    //void        correctBoundingRect();
 
 private:
     Type                    mType;

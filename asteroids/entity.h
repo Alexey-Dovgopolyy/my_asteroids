@@ -20,14 +20,18 @@ public:
     void            destroy();
     virtual void    remove();
     virtual bool    isDestroyed() const;
+    void            setRect(sf::FloatRect rect);
+    sf::FloatRect   getRect() const;
 
 protected:
     virtual void    updateCurrent(sf::Time dt,
                                  CommandQueue& commands);
+    void            correctBoundingRect();
 
 private:
     sf::Vector2f        mVelocity;
     int                 mHitpoints;
+    sf::FloatRect       mBoundingRect;
 };
 
 #endif // ENTITY_H

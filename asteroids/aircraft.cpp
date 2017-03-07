@@ -16,6 +16,7 @@ Aircraft::Aircraft(Type type, const TextureHolder &textures)
     , mDirection(0.f)
 {
     centerOrigin(mSprite);
+    setRect(mSprite.getGlobalBounds());
 
     mFireCommand.category = Category::SceneAirLayer;
     mFireCommand.action = [this, &textures] (SceneNode& node,
@@ -33,14 +34,15 @@ unsigned int Aircraft::getCategory() const
 
 sf::FloatRect Aircraft::getBoundingRect() const
 {
-    return getWorldTransform().transformRect
-                                    (mSprite.getGlobalBounds());
+    //qDebug() << mBoundingRect.width << " " << mBoundingRect.height;
+    return getWorldTransform().transformRect(getRect());
+    //return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 void Aircraft::setDirection(float angle)
 {
     mDirection = angle;
-    //mSprite.setRotation(mDirection);
+    mSprite.setRotation(mDirection);
 }
 
 float Aircraft::getDirection() const
@@ -63,7 +65,7 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     //qDebug() << "global" << mSprite.getGlobalBounds().left << " " << mSprite.getGlobalBounds().top;
     checkProjectileLaunch(dt, commands);
-    setRotation(mDirection);
+    //setRotation(mDirection);
     Entity::updateCurrent(dt, commands);    
 }
 
@@ -96,8 +98,7 @@ void Aircraft::createProjectile(SceneNode& node,
                                 float xOffset, float yOffset,
                                 const TextureHolder& textures)
 {
-    std::unique_ptr<Projectile> projectile
-                                    (new Projectile(type,textures));
+    std::unique_ptr<Projectile> projectile(new Projectile(type,textures));
     sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width,
                         yOffset * mSprite.getGlobalBounds().height);
 
@@ -109,7 +110,7 @@ void Aircraft::createProjectile(SceneNode& node,
     offset.x = offset.x * std::cos(toRadian(mDirection));
     offset.y = offset.x * std::tan(toRadian(mDirection));
 
-    qDebug() << offset.x << " " << offset.y;
+    //qDebug() << offset.x << " " << offset.y;
 
     sf::Vector2f worldPos = (getWorldPosition() + offset);
 
@@ -118,3 +119,16 @@ void Aircraft::createProjectile(SceneNode& node,
     projectile->setVelocity(velocity);
     node.attachChild(std::move(projectile));
 }
+
+//void Aircraft::correctBoundingRect()
+//{
+//    float difference = std::abs(mBoundingRect.width - mBoundingRect.height);
+//    if (mBoundingRect.width > mBoundingRect.height) {
+//        mBoundingRect.left -= difference / 2;
+//        mBoundingRect.width -= difference;
+//    }
+//    else {
+//        mBoundingRect.top += difference / 2;
+//        mBoundingRect.height -= difference;
+//    }
+//}

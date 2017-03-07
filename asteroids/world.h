@@ -6,6 +6,7 @@
 #include "resouceholder.h"
 #include "commandqueue.h"
 #include "spritenode.h"
+#include "asteroid.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Time.hpp>
@@ -32,7 +33,10 @@ private:
 
     void            adaptPlayerPosition();
     void            adaptPlayerVelocity();
-    void            dealWithMaxPlayerSpeed(sf::Vector2f& current, float maxX, float maxY);
+    void            dealWithMaxPlayerSpeed(sf::Vector2f& current,
+                                           float maxX, float maxY);
+    void            destroyEntitiesOutsideView();
+    void            spawnAsteroids();
 
 private:
     enum Layer {

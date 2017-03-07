@@ -19,6 +19,8 @@ namespace Textures {
         Buttons,
         Explosion,
         Particle,
+        RockAsteroid,
+        IceAsteroid
     };
 }
 

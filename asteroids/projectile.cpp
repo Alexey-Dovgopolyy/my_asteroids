@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include "resouceholder.h"
+#include "utility.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -10,7 +11,9 @@ Projectile::Projectile(Type type, const TextureHolder &textures)
               sf::IntRect(175, 64, 3, 14))
     , mTargetDirection()
 {
-
+    centerOrigin(mSprite);
+    setRect(mSprite.getGlobalBounds());
+    correctBoundingRect();
 }
 
 unsigned int Projectile::getCategory() const
@@ -20,12 +23,13 @@ unsigned int Projectile::getCategory() const
 
 sf::FloatRect Projectile::getBoundingRect() const
 {
-    return getWorldTransform().transformRect(mSprite.getGlobalBounds());
+    return getWorldTransform().transformRect(getRect());
+    //return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 float Projectile::getMaxSpeed() const
 {
-    return 200;
+    return 400;
 }
 
 int Projectile::getDamage() const

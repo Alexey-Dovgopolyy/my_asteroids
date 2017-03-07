@@ -27,6 +27,7 @@ public:
 
     void            attachChild(Ptr child);
     Ptr             detachChild(const SceneNode& node);
+    std::vector<Ptr>::size_type getChildsCount() const;
 
     sf::Vector2f    getWorldPosition() const;
     sf::Transform   getWorldTransform() const;
@@ -34,8 +35,11 @@ public:
     void            update(sf::Time dt, CommandQueue& commands);
     void            onCommand(const Command& command, sf::Time dt);
     virtual unsigned int getCategory() const;
+    void            removeWrecks();
 
     virtual sf::FloatRect getBoundingRect() const;
+    virtual bool    isMarkedForRemoval() const;
+    virtual bool    isDestroyed() const;
 
 private:
     virtual void    updateCurrent(sf::Time dt, CommandQueue& commands);

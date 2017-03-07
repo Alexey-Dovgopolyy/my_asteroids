@@ -37,6 +37,11 @@ SceneNode::Ptr SceneNode::detachChild(const SceneNode& node)
     return child;
 }
 
+std::vector<SceneNode::Ptr>::size_type SceneNode::getChildsCount() const
+{
+    return mChildren.size();
+}
+
 sf::Vector2f SceneNode::getWorldPosition() const
 {
     return getWorldTransform() * sf::Vector2f();
@@ -62,7 +67,11 @@ void SceneNode::update(sf::Time dt, CommandQueue& commands)
 
 void SceneNode::onCommand(const Command& command, sf::Time dt)
 {
+    //qDebug() << "cat" << command.category << " " << getCategory();
     if (command.category & getCategory()){
+//        if (command.category & 16) {
+//            qDebug() << "cat" << command.category << " " << getCategory();
+//        }
         command.action(*this, dt);
     }
 
@@ -76,9 +85,29 @@ unsigned int SceneNode::getCategory() const
     return mType;
 }
 
+void SceneNode::removeWrecks()
+{
+    auto remove = remove_if(mChildren.begin(), mChildren.end(),
+                                std::mem_fn(&SceneNode::isMarkedForRemoval));
+    mChildren.erase(remove, mChildren.end());
+
+    std::for_each(mChildren.begin(), mChildren.end(),
+                                    std::mem_fn(&SceneNode::removeWrecks));
+}
+
 sf::FloatRect SceneNode::getBoundingRect() const
 {
     return sf::FloatRect();
+}
+
+bool SceneNode::isMarkedForRemoval() const
+{
+    return isDestroyed();
+}
+
+bool SceneNode::isDestroyed() const
+{
+    return false; // by default
 }
 
 void SceneNode::updateCurrent(sf::Time, CommandQueue &)

@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     spritenode.cpp \
     state.cpp \
     statestack.cpp \
-    projectile.cpp
+    projectile.cpp \
+    asteroid.cpp
 
 
 
@@ -44,7 +45,8 @@ HEADERS += \
     state.h \
     statestack.h \
     stateidentifiers.h \
-    projectile.h
+    projectile.h \
+    asteroid.h
 
 win32 {
 

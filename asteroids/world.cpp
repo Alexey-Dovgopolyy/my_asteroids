@@ -23,17 +23,24 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
     //qDebug() << mSpawnPosition.x << " " << mSpawnPosition.y;
     loadTextures();
     buildScene();
+    spawnAsteroids();
 }
 
 void World::update(sf::Time dt)
 {
+    destroyEntitiesOutsideView();
+
     while (!mCommandQueue.isEmpty()) {
         mSceneGraph.onCommand(mCommandQueue.pop(), dt);
     }
     adaptPlayerVelocity();
 
+    mSceneGraph.removeWrecks();
     mSceneGraph.update(dt, mCommandQueue);
     adaptPlayerPosition();
+
+    //qDebug() << "low" << mSceneLayer[LowerAir]->getChildsCount();
+    //qDebug() << "up" << mSceneLayer[UpperAir]->getChildsCount();
 }
 
 void World::draw()
@@ -73,9 +80,10 @@ void World::buildScene()
 
 void World::loadTextures()
 {
-    mTextures.load(Textures::Space,     "Media/Textures/Space.jpg");
-    mTextures.load(Textures::Eagle,     "Media/Textures/Eagle.png");
-    mTextures.load(Textures::Entities,  "Media/Textures/Entities.png");
+    mTextures.load(Textures::Space,         "Media/Textures/Space.jpg");
+    mTextures.load(Textures::Eagle,         "Media/Textures/Eagle.png");
+    mTextures.load(Textures::Entities,      "Media/Textures/Entities.png");
+    mTextures.load(Textures::RockAsteroid,  "Media/Textures/Asteroid1.png");
 }
 
 void World::adaptPlayerPosition()
@@ -142,4 +150,27 @@ void World::dealWithMaxPlayerSpeed(sf::Vector2f &current, float maxX, float maxY
     else if (current.y < -maxY) {
         current.y = -maxY;
     }
+}
+
+void World::destroyEntitiesOutsideView()
+{
+    Command command;
+    command.category =  Category::Asteroid | Category::AlliedProjectile;
+    command.action = derivedAction<Entity>([this] (Entity& e, sf::Time dt){
+
+            if (!mWorldBounds.intersects(e.getBoundingRect())) {
+                e.remove();
+            }
+    });
+
+    mCommandQueue.push(command);
+}
+
+void World::spawnAsteroids()
+{
+    std::unique_ptr<Asteroid> asteroid(new Asteroid(Asteroid::Rock,mTextures));
+    asteroid->setPosition(30.f, 30.f);
+    asteroid->setVelocity(20.f, 20.f);
+
+    mSceneLayer[UpperAir]->attachChild(std::move(asteroid));
 }
