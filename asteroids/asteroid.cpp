@@ -15,7 +15,7 @@ Asteroid::Asteroid(Type type, const TextureHolder &textures)
     , mRotateTime(sf::seconds(0.05f))
     , mTextures(textures)
 {
-    mSprite.setScale(0.5f, 0.5f);
+    //mSprite.setScale(0.5f, 0.5f);
     centerOrigin(mSprite);
     setRect(mSprite.getGlobalBounds());
 }
