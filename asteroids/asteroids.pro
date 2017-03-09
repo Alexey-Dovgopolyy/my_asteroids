@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     state.cpp \
     statestack.cpp \
     projectile.cpp \
-    asteroid.cpp
+    asteroid.cpp \
+    datatable.cpp
 
 
 
@@ -46,7 +47,8 @@ HEADERS += \
     statestack.h \
     stateidentifiers.h \
     projectile.h \
-    asteroid.h
+    asteroid.h \
+    datatable.h
 
 win32 {
 

@@ -6,14 +6,17 @@
 
 #include <QDebug>
 
-Asteroid::Asteroid(Type type, const TextureHolder &textures)
-    : Entity(20)
+Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &textures)
+    : Entity(Table[type].hitpoints)
     , mType(type)
-    , mSprite(textures.get(Textures::RockAsteroid),
-              sf::IntRect(0, 202, 100, 82))
-    , mSpritePosition(75)
-    , mRotateTime(sf::seconds(0.05f))
+    , mSize(size)
+    , mSprite(textures.get(Table[type].texture),
+              Table[type].textureRect)
+    , mSpritePosition(Table[type].spritePosition)
+    , mRotateTime(Table[type].rotateTime)
     , mTextures(textures)
+    , mMaxSpeed(Table[type].speed[speed])
+    , mDamage(Table[type].damage)
 {
     //mSprite.setScale(0.5f, 0.5f);
     centerOrigin(mSprite);
@@ -28,17 +31,16 @@ unsigned int Asteroid::getCategory() const
 sf::FloatRect Asteroid::getBoundingRect() const
 {
     return getWorldTransform().transformRect(getRect());
-    //return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }
 
 float Asteroid::getMaxSpeed() const
 {
-    return 100;
+    return mMaxSpeed;
 }
 
 int Asteroid::getDamage() const
 {
-    return 20;
+    return mDamage;
 }
 
 void Asteroid::updateCurrent(sf::Time dt, CommandQueue &commands)

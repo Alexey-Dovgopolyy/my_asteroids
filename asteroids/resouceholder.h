@@ -42,7 +42,7 @@ void ResourceHolder<Resource, Identifier>::load(Identifier id,
 template <typename Resource, typename Identifier>
 template <typename Parameter>
 void ResourceHolder<Resource, Identifier>::load(Identifier id,
-            const std::__cxx11::string filename, Parameter param)
+            const std::string filename, Parameter param)
 {
     std::unique_ptr<Resource> resource(new Resource());
     if (!resource->loadFromFile(filename, param)) {

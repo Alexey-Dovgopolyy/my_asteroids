@@ -15,4 +15,5 @@ float			toDegree(float radian);
 float			toRadian(float degree);
 
 
+int             randomInt(int exclusiveMax);
 #endif // UTILITY_H

@@ -1,14 +1,20 @@
 #include "aircraft.h"
 #include "commandqueue.h"
+#include "datatable.h"
 
 #include <cmath>
 #include <QDebug>
+#include <vector>
+
+namespace {
+    const std::vector<AircraftData> Table = initializeAircraftData();
+}
 
 Aircraft::Aircraft(Type type, const TextureHolder &textures)
-    : Entity(100)
+    : Entity(Table[type].hitpoints)
     , mType(type)
-    , mSprite(textures.get(Textures::Entities),
-              sf::IntRect(0, 0, 48, 64))
+    , mSprite(textures.get(Table[type].texture),
+              Table[type].textureRect)
     , mFireCommand()
     , mFireCountdown(sf::Time::Zero)
     , mIsFiring(false)
@@ -24,6 +30,7 @@ Aircraft::Aircraft(Type type, const TextureHolder &textures)
     {
         createBullet(node, textures);
     };
+
 }
 
 unsigned int Aircraft::getCategory() const

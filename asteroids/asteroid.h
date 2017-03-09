@@ -3,10 +3,15 @@
 
 #include "entity.h"
 #include "resourceidentifiers.h"
+#include "datatable.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 
 #include <map>
+
+namespace {
+    const std::vector<AsteroidData> Table = initializeAsteroidData();
+}
 
 class Asteroid : public Entity
 {
@@ -17,8 +22,14 @@ public:
         TypeCount
     };
 
+    enum Size {
+        Solid ,
+        Wreck ,
+        SizeCount
+    };
+
 public:
-    Asteroid(Type type, const TextureHolder& textures);
+    Asteroid(Type type, Size size, int speed, const TextureHolder& textures);
     virtual unsigned int    getCategory() const;
     virtual sf::FloatRect   getBoundingRect() const;
     float                   getMaxSpeed() const;
@@ -33,11 +44,15 @@ private:
 
 private:
     Type            mType;
+    Size            mSize;
     sf::Sprite      mSprite;
     short           mSpritePosition;
     sf::Time        mRotateTime;
     const TextureHolder&  mTextures;
     sf::FloatRect   mBoundingRect;
+
+    int             mMaxSpeed;
+    int             mDamage;
 
     std::map<short, sf::IntRect> mTexturesMap;
 };

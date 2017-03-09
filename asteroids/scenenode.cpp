@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <set>
 
 #include <QDebug>
 
@@ -110,6 +111,45 @@ bool SceneNode::isDestroyed() const
     return false; // by default
 }
 
+void SceneNode::checkSceneCollision(SceneNode& graph,
+                                        std::set<Pair>& collisionPairs)
+{
+    checkNodeCollision(graph, collisionPairs);
+
+    for (Ptr& child : graph.mChildren) {
+        checkSceneCollision(*child, collisionPairs);
+    }
+}
+
+void SceneNode::checkNodeCollision(SceneNode& node,
+                                        std::set<Pair>& collisionPairs)
+{
+    if (this != &node && collision(*this, node)
+            && !isDestroyed() && !node.isDestroyed()) {
+        collisionPairs.insert(std::minmax(this, &node));
+    }
+
+    for (Ptr& child : mChildren) {
+        child->checkNodeCollision(node, collisionPairs);
+    }
+}
+
+void SceneNode::updatePositionNodes(std::array<column, nodesCount>& nodes,
+                                    float nodeWidth, float nodeHeight,
+                                    float worldMargine)
+{
+    short row = static_cast<short>((getWorldPosition().y + worldMargine)
+                                                             / (nodeHeight + 1));
+    short col = static_cast<short>((getWorldPosition().x + worldMargine)
+                                                             / (nodeWidth + 1));
+
+    nodes[row][col].push_back(this);
+
+    for (Ptr& child : mChildren) {
+        child->updatePositionNodes(nodes, nodeWidth, nodeHeight, worldMargine);
+    }
+}
+
 void SceneNode::updateCurrent(sf::Time, CommandQueue &)
 {
     // reimplement in childrens
@@ -158,4 +198,9 @@ void SceneNode::drawBoundingRect(sf::RenderTarget& target,
     shape.setOutlineThickness(1.f);
 
     target.draw(shape);
+}
+
+bool collision(SceneNode& first, SceneNode& second)
+{
+    return first.getBoundingRect().intersects(second.getBoundingRect());
 }

@@ -13,8 +13,14 @@
 #include <SFML/System/NonCopyable.hpp>
 
 #include <array>
+#include <vector>
+#include <set>
 
+const short columns = 10;
+const short rows    = 10;
 
+//const short nodesCount = 10;
+//using column = std::array<std::vector<SceneNode*>, nodesCount>;
 
 class World
 {
@@ -36,7 +42,9 @@ private:
     void            dealWithMaxPlayerSpeed(sf::Vector2f& current,
                                            float maxX, float maxY);
     void            destroyEntitiesOutsideView();
-    void            spawnAsteroids();
+    void            spawnAsteroids(sf::Time dt);
+    void            handleCollisions();
+    void            debugShowNodes(std::array<column, nodesCount> &nodes);
 
 private:
     enum Layer {
@@ -60,7 +68,6 @@ private:
     sf::FloatRect                       mWorldBounds;
     sf::Vector2f                        mSpawnPosition;
     Aircraft*                           mPlayerAircraft;
-
 };
 
 #endif // WORLD_H
