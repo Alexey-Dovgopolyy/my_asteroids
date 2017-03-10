@@ -34,6 +34,7 @@ public:
     virtual sf::FloatRect   getBoundingRect() const;
     float                   getMaxSpeed() const;
     int                     getDamage() const;
+    unsigned int            getSize() const;
 
 private:
     virtual void updateCurrent(sf::Time dt, CommandQueue &commands);
@@ -48,6 +49,7 @@ private:
     sf::Sprite      mSprite;
     short           mSpritePosition;
     sf::Time        mRotateTime;
+    sf::Time        mTimeLastUpdate;
     const TextureHolder&  mTextures;
     sf::FloatRect   mBoundingRect;
 

@@ -48,7 +48,8 @@ HEADERS += \
     stateidentifiers.h \
     projectile.h \
     asteroid.h \
-    datatable.h
+    datatable.h \
+    levelidentifiers.h
 
 win32 {
 

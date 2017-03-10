@@ -7,25 +7,31 @@
 #include <QDebug>
 
 Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &textures)
-    : Entity(Table[type].hitpoints)
+    : Entity(size == Solid ? Table[type].hitpoints : Table[type].hitpoints / 2)
     , mType(type)
     , mSize(size)
     , mSprite(textures.get(Table[type].texture),
               Table[type].textureRect)
     , mSpritePosition(Table[type].spritePosition)
     , mRotateTime(Table[type].rotateTime)
+    , mTimeLastUpdate(sf::Time::Zero)
     , mTextures(textures)
     , mMaxSpeed(Table[type].speed[speed])
     , mDamage(Table[type].damage)
 {
-    //mSprite.setScale(0.5f, 0.5f);
+    if (mSize == Wreck) {
+        mSprite.setScale(0.5f, 0.5f);
+    }
     centerOrigin(mSprite);
     setRect(mSprite.getGlobalBounds());
 }
 
 unsigned int Asteroid::getCategory() const
 {
-    return Category::RockAsteroid;
+    if (mType == Rock)
+        return Category::RockAsteroid;
+    else if (mType == Ice)
+        return Category::IceAsteroid;
 }
 
 sf::FloatRect Asteroid::getBoundingRect() const
@@ -43,16 +49,23 @@ int Asteroid::getDamage() const
     return mDamage;
 }
 
+unsigned int Asteroid::getSize() const
+{
+    return mSize;
+}
+
 void Asteroid::updateCurrent(sf::Time dt, CommandQueue &commands)
 {
-    static sf::Time time = sf::Time::Zero;
-    time += dt;
-    if (time > mRotateTime) {
-        time -= mRotateTime;
+    if (mTimeLastUpdate > mRotateTime) {
+        mTimeLastUpdate -= mRotateTime;
 
         float angle = mSprite.getRotation();
         angle += 360 / mSpritePosition;
         mSprite.setRotation(angle);
+
+    }
+    else {
+        mTimeLastUpdate += dt;
     }
 
     Entity::updateCurrent(dt, commands);
