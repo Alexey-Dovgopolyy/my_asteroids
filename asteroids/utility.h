@@ -8,7 +8,10 @@ namespace sf {
     class Sprite;
 }
 
+class Animation;
+
 void centerOrigin(sf::Sprite& sprite);
+void centerOrigin(Animation& animation);
 
 // Degree/radian conversion
 float			toDegree(float radian);

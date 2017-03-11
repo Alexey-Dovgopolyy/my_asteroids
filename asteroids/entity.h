@@ -18,6 +18,7 @@ public:
     void            repair(int points);
     void            damage(int points);
     void            destroy();
+    void            adapt(sf::FloatRect worldBounds);
     virtual void    remove();
     virtual bool    isDestroyed() const;
     void            setRect(sf::FloatRect rect);

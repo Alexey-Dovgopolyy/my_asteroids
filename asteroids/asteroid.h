@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "resourceidentifiers.h"
 #include "datatable.h"
+#include "animation.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -36,6 +37,9 @@ public:
     int                     getDamage() const;
     unsigned int            getSize() const;
 
+    virtual void            remove();
+    virtual bool            isMarkedForRemoval() const;
+
 private:
     virtual void updateCurrent(sf::Time dt, CommandQueue &commands);
     virtual void drawCurrent(sf::RenderTarget &target,
@@ -52,6 +56,9 @@ private:
     sf::Time        mTimeLastUpdate;
     const TextureHolder&  mTextures;
     sf::FloatRect   mBoundingRect;
+
+    Animation       mExplosion;
+    bool            mShowExplosion;
 
     int             mMaxSpeed;
     int             mDamage;

@@ -59,6 +59,18 @@ void Entity::destroy()
     mHitpoints = 0;
 }
 
+void Entity::adapt(sf::FloatRect worldBounds)
+{
+    sf::Vector2f pos = getPosition();
+
+    if (pos.x > worldBounds.width) pos.x = 0;
+    if (pos.x < 0) pos.x = worldBounds.width;
+    if (pos.y > worldBounds.height) pos.y = 0;
+    if (pos.y < 0) pos.y = worldBounds.height;
+
+    setPosition(pos.x, pos.y);
+}
+
 void Entity::remove()
 {
     destroy();

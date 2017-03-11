@@ -17,11 +17,19 @@ Aircraft::Aircraft(Type type, const TextureHolder &textures)
               Table[type].textureRect)
     , mFireCommand()
     , mFireCountdown(sf::Time::Zero)
+    , mExplosion(textures.get(Textures::Explosion))
     , mIsFiring(false)
+    , mShowExplosion(true)
     , mFireRateLevel(1)
     , mDirection(0.f)
 {
+    mExplosion.setFrameSize(sf::Vector2i(256, 256));
+    mExplosion.setNumFrames(16);
+    mExplosion.setDuration(sf::seconds(1));
+
     centerOrigin(mSprite);
+    centerOrigin(mExplosion);
+
     setRect(mSprite.getGlobalBounds());
 
     mFireCommand.category = Category::SceneAirLayer;
@@ -46,6 +54,18 @@ sf::FloatRect Aircraft::getBoundingRect() const
     //return getWorldTransform().transformRect(mSprite.getGlobalBounds());
 }
 
+void Aircraft::remove()
+{
+    Entity::remove();
+    //mShowExplosion = false;
+}
+
+bool Aircraft::isMarkedForRemoval() const
+{
+    return isDestroyed() &&
+                        (mExplosion.isFinished() || !mShowExplosion);
+}
+
 void Aircraft::setDirection(float angle)
 {
     mDirection = angle;
@@ -65,14 +85,22 @@ void Aircraft::fire()
 void Aircraft::drawCurrent(sf::RenderTarget& target,
                          sf::RenderStates states) const
 {
-    target.draw(mSprite, states);
+    if (isDestroyed() && mShowExplosion) {
+        target.draw(mExplosion, states);
+    }
+    else {
+        target.draw(mSprite, states);
+    }
 }
 
 void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
-{
-    //qDebug() << "global" << mSprite.getGlobalBounds().left << " " << mSprite.getGlobalBounds().top;
+{    
+    if (isDestroyed()) {
+        mExplosion.update(dt);
+        return;
+    }
+
     checkProjectileLaunch(dt, commands);
-    //setRotation(mDirection);
     Entity::updateCurrent(dt, commands);    
 }
 

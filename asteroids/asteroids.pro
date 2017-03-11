@@ -24,7 +24,9 @@ SOURCES += main.cpp \
     statestack.cpp \
     projectile.cpp \
     asteroid.cpp \
-    datatable.cpp
+    datatable.cpp \
+    textnode.cpp \
+    animation.cpp
 
 
 
@@ -49,7 +51,9 @@ HEADERS += \
     projectile.h \
     asteroid.h \
     datatable.h \
-    levelidentifiers.h
+    levelidentifiers.h \
+    textnode.h \
+    animation.h
 
 win32 {
 

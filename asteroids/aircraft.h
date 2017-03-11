@@ -11,6 +11,7 @@
 #include "resourceidentifiers.h"
 #include "utility.h"
 #include "projectile.h"
+#include "animation.h"
 
 class Aircraft : public Entity
 {
@@ -23,8 +24,10 @@ public:
 public:
     Aircraft(Type type, const TextureHolder& textures);
 
-    virtual unsigned int getCategory() const;
-    virtual sf::FloatRect getBoundingRect() const;
+    virtual unsigned int    getCategory() const;
+    virtual sf::FloatRect   getBoundingRect() const;
+    virtual void            remove();
+    virtual bool            isMarkedForRemoval() const;
 
     void        setDirection(float angle);
     float       getDirection() const;
@@ -51,8 +54,10 @@ private:
     sf::Sprite				mSprite;
     Command                 mFireCommand;
     sf::Time                mFireCountdown;
+    Animation               mExplosion;
 
     bool                    mIsFiring;
+    bool                    mShowExplosion;
 
     int                     mFireRateLevel;
     float                   mDirection;

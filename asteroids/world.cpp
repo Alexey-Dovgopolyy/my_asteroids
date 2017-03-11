@@ -49,11 +49,12 @@ void World::update(sf::Time dt)
 
     handleCollisions();
 
+    mSceneGraph.removeWrecks();
     spawnAsteroids(dt);
 
-    mSceneGraph.removeWrecks();
     mSceneGraph.update(dt, mCommandQueue);
     adaptPlayerPosition();
+    adaptAstoriodPosition();
 
     //qDebug() << "low" << mSceneLayer[LowerAir]->getChildsCount();
     //qDebug() << "up" << mSceneLayer[UpperAir]->getChildsCount();
@@ -92,6 +93,21 @@ void World::buildScene()
     mPlayerAircraft = playerAircraft.get();
     mSceneLayer[UpperAir]->attachChild(std::move(playerAircraft));
     mPlayerAircraft->setPosition(mSpawnPosition);
+
+    std::string hp = "HP " + std::to_string(mPlayerAircraft->getHitpoints());
+    std::cout << hp << std::endl;
+    std::unique_ptr<TextNode> hpMonitor(new TextNode(mFonts, hp));
+    mHPMonitor = hpMonitor.get();
+    mHPMonitor->setPosition(mWorldView.getSize().x * 0.9f,
+                            mWorldView.getSize().y * 0.01f);
+    mSceneLayer[UpperAir]->attachChild(std::move(hpMonitor));
+
+    std::string level = "Level " + std::to_string(mLevel);
+    std::unique_ptr<TextNode> levelMonitor(new TextNode(mFonts, level));
+    mLevelMonitor = levelMonitor.get();
+    mLevelMonitor->setPosition(mWorldView.getSize().x * 0.01f,
+                               mWorldView.getSize().y * 0.01f);
+    mSceneLayer[UpperAir]->attachChild(std::move(levelMonitor));
 }
 
 void World::loadTextures()
@@ -101,6 +117,7 @@ void World::loadTextures()
     mTextures.load(Textures::Entities,      "Media/Textures/Entities.png");
     mTextures.load(Textures::RockAsteroid,  "Media/Textures/Asteroid1.png");
     mTextures.load(Textures::IceAsteroid,   "Media/Textures/Asteroid3.png");
+    mTextures.load(Textures::Explosion,     "Media/Textures/Explosion.png");
 }
 
 void World::adaptPlayerPosition()
@@ -117,6 +134,20 @@ void World::adaptPlayerPosition()
         position.y = mWorldBounds.top;
 
     mPlayerAircraft->setPosition(position);
+}
+
+void World::adaptAstoriodPosition()
+{
+    Command command;
+    command.category = Category::Asteroid;
+    command.action = derivedAction<Entity>([this] (Entity& e, sf::Time){
+
+            if (!mWorldBounds.intersects(e.getBoundingRect())) {
+                e.adapt(mWorldBounds);
+            }
+    });
+
+    mCommandQueue.push(command);
 }
 
 void World::adaptPlayerVelocity()
@@ -153,7 +184,8 @@ void World::adaptPlayerVelocity()
     previousVelocity = currentVelocity;
 }
 
-void World::dealWithMaxPlayerSpeed(sf::Vector2f &current, float maxX, float maxY)
+void World::dealWithMaxPlayerSpeed(sf::Vector2f &current,
+                                                    float maxX, float maxY)
 {
     if (current.x > maxX) {
         current.x = maxX;
@@ -172,7 +204,7 @@ void World::dealWithMaxPlayerSpeed(sf::Vector2f &current, float maxX, float maxY
 void World::destroyEntitiesOutsideView()
 {
     Command command;
-    command.category =  Category::Asteroid | Category::AlliedProjectile;
+    command.category = Category::AlliedProjectile;
     command.action = derivedAction<Entity>([this] (Entity& e, sf::Time){
 
             if (!mWorldBounds.intersects(e.getBoundingRect())) {
@@ -208,7 +240,7 @@ void World::spawnAsteroids(sf::Time dt)
         int ySpawn = randomInt(mWorldBounds.height);
         asteroidSpawnCoordinates(xSpawn, ySpawn);
 
-        qDebug() << xSpawn << " " << ySpawn;
+        //qDebug() << xSpawn << " " << ySpawn;
         asteroid->setPosition(static_cast<float>(xSpawn), static_cast<float>(ySpawn));
 
         int vx = randomInt(100);
@@ -347,7 +379,7 @@ void World::handleCollisions()
 
             asteroid.damage(projectile.getDamage());
 
-            if (asteroid.isMarkedForRemoval() &&
+            if (asteroid.getHitpoints() <= 0 &&
                     asteroid.getSize() == Asteroid::Size::Solid) {
                 qDebug() << "cat" << asteroid.getCategory();
                 spawnSmallAsteroid(asteroid.getPosition(), asteroid.getCategory());
@@ -363,6 +395,9 @@ void World::handleCollisions()
 
             aircraft.damage(asteroid.getHitpoints());
             asteroid.destroy();
+
+            std::string hp = "HP " + std::to_string(aircraft.getHitpoints());
+            mHPMonitor->setString(hp);
         }
     }
 }

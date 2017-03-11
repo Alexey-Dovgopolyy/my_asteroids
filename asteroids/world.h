@@ -9,6 +9,7 @@
 #include "spritenode.h"
 #include "asteroid.h"
 #include "category.h"
+#include "textnode.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Time.hpp>
@@ -40,6 +41,7 @@ private:
     void            loadTextures();
 
     void            adaptPlayerPosition();
+    void            adaptAstoriodPosition();
     void            adaptPlayerVelocity();
     void            dealWithMaxPlayerSpeed(sf::Vector2f& current,
                                                      float maxX, float maxY);
@@ -85,6 +87,9 @@ private:
 
     unsigned int                        mLevel;
     LevelInfo                           mLevelInfo;
+
+    TextNode*                           mHPMonitor;
+    TextNode*                           mLevelMonitor;
 };
 
 #endif // WORLD_H
