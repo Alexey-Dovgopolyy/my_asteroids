@@ -41,6 +41,8 @@ unsigned int Asteroid::getCategory() const
         return Category::RockAsteroid;
     else if (mType == Ice)
         return Category::IceAsteroid;
+
+    return Category::RockAsteroid;
 }
 
 sf::FloatRect Asteroid::getBoundingRect() const

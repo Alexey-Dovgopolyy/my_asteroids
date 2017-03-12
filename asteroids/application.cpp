@@ -1,6 +1,8 @@
 #include "application.h"
 #include "state.h"
 #include "gamestate.h"
+#include "titlestate.h"
+#include "menustate.h"
 #include "stateidentifiers.h"
 
 #include <QTime>
@@ -18,15 +20,18 @@ Application::Application()
     , mStatisticsUpdateTime()
     , mStatisticsNumFrames(0)
 {
+    mTextures.load(Textures::TitleScreen,
+                                "Media/Textures/TitleScreen.png");
+    mTextures.load(Textures::Buttons,
+                                "Media/Textures/Buttons.png");
+
     mFonts.load(Fonts::Main, "Media/Sansation.ttf");
     mStatisticsText.setFont(mFonts.get(Fonts::Main));
     mStatisticsText.setPosition(5.f, 5.f);
     mStatisticsText.setCharacterSize(10u);
 
     registerStates();
-    /////////////////!!!!!!!!!!
-    mStateStack.pushState(States::Game);
-    /////////////////1111111111
+    mStateStack.pushState(States::Title);
 }
 
 void Application::run()
@@ -100,5 +105,7 @@ void Application::updateStatistics(sf::Time dt)
 
 void Application::registerStates()
 {
+    mStateStack.registerState<TitleState>(States::Title);
+    mStateStack.registerState<MenuState>(States::Menu);
     mStateStack.registerState<GameState>(States::Game);
 }

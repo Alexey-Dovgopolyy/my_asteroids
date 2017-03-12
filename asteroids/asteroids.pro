@@ -26,7 +26,13 @@ SOURCES += main.cpp \
     asteroid.cpp \
     datatable.cpp \
     textnode.cpp \
-    animation.cpp
+    animation.cpp \
+    titlestate.cpp \
+    component.cpp \
+    label.cpp \
+    container.cpp \
+    button.cpp \
+    menustate.cpp
 
 
 
@@ -53,7 +59,13 @@ HEADERS += \
     datatable.h \
     levelidentifiers.h \
     textnode.h \
-    animation.h
+    animation.h \
+    titlestate.h \
+    component.h \
+    label.h \
+    container.h \
+    button.h \
+    menustate.h
 
 win32 {
 
