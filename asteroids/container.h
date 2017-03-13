@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
 namespace GUI {
 
 class Container : public Component
@@ -14,12 +16,13 @@ public:
     typedef std::shared_ptr<Container> Ptr;
 
 public:
-    Container();
+    Container(sf::RenderWindow *window);
 
     void pack(Component::Ptr component);
 
-    virtual bool isSelectable() const;
-    virtual void handleEvent(const sf::Event& event);
+    virtual bool    isSelectable() const;
+    virtual void    handleEvent(const sf::Event& event);
+    void            handleRealtimeInput();
 
 private:
     virtual void draw(sf::RenderTarget& target,
@@ -33,7 +36,7 @@ private:
 private:
     std::vector<Component::Ptr>     mChildren;
     int                             mSelectedChild;
-
+    sf::RenderWindow*               mWindow;
 };
 
 }

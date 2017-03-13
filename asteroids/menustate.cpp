@@ -9,7 +9,7 @@
 
 MenuState::MenuState(StateStack &stack, Context context)
     : State(stack, context)
-    , mGUIContainer()
+    , mGUIContainer(context.window)
 {
     sf::Texture& texture = context.textures->get(Textures::TitleScreen);
     mBackgroundSprite.setTexture(texture);
@@ -47,6 +47,7 @@ void MenuState::draw()
 
 bool MenuState::update(sf::Time dt)
 {
+    mGUIContainer.handleRealtimeInput();
     return true;
 }
 

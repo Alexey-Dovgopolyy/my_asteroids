@@ -45,6 +45,8 @@ public:
 
     virtual void        handleEvent(const sf::Event& event);
 
+    virtual sf::FloatRect getRect() const;
+
 private:
     virtual void        draw(sf::RenderTarget& target,
                             sf::RenderStates states) const;

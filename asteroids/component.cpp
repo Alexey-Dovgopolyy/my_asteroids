@@ -43,4 +43,9 @@ void Component::deactivate()
     mIsActive = false;
 }
 
+sf::FloatRect Component::getRect() const
+{
+    return sf::FloatRect();
+}
+
 }

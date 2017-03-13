@@ -35,6 +35,8 @@ public:
 
     virtual void    handleEvent(const sf::Event& event) = 0;
 
+    virtual sf::FloatRect getRect() const;
+
 private:
     bool            mIsSelected;
     bool            mIsActive;

@@ -6,6 +6,8 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <QDebug>
+
 namespace GUI {
 
 Button::Button(State::Context context)
@@ -87,6 +89,15 @@ void Button::deactivate()
 
 void Button::handleEvent(const sf::Event& event)
 {
+}
+
+sf::FloatRect Button::getRect() const
+{
+    sf::FloatRect rect(getPosition().x, getPosition().y,
+                       mSprite.getTextureRect().width,
+                       mSprite.getTextureRect().height);
+    qDebug() << "pos" << rect.left << " " << rect.top;
+    return rect;
 }
 
 void Button::draw(sf::RenderTarget& target,

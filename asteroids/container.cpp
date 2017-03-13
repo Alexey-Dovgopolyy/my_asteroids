@@ -8,9 +8,10 @@
 
 namespace GUI {
 
-Container::Container()
+Container::Container(sf::RenderWindow* window)
     : mChildren()
     , mSelectedChild(-1)
+    , mWindow(window)
 {
 }
 
@@ -46,6 +47,29 @@ void Container::handleEvent(const sf::Event& event)
             if (hasSelection()) {
                 mChildren[mSelectedChild]->activate();
             }
+        }
+    }
+}
+
+void Container::handleRealtimeInput()
+{
+    sf::Vector2f mousePos =
+                        static_cast<sf::Vector2f>
+                        (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
+
+
+    for (std::vector<Component::Ptr>::size_type i = 0; i < mChildren.size(); ++i) {
+
+        sf::FloatRect bounds = mChildren[i]->getRect();
+        if (bounds.contains(mousePos)) {
+            qDebug() << "mouse " << mousePos.x << " " << mousePos.y;
+            qDebug() << "button " << bounds.left << " " << bounds.top;
+
+            if (hasSelection()) {
+                mChildren[mSelectedChild]->deselect();
+            }
+            mChildren[i]->select();
+            mSelectedChild = static_cast<int>(i);
         }
     }
 }
