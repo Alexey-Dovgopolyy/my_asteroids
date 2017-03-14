@@ -30,7 +30,7 @@ bool Container::isSelectable() const
 }
 
 void Container::handleEvent(const sf::Event& event)
-{
+{    
     if (hasSelection() && mChildren[mSelectedChild]->isActive()) {
        mChildren[mSelectedChild]->handleEvent(event);
     }
@@ -57,6 +57,13 @@ void Container::handleRealtimeInput()
                         static_cast<sf::Vector2f>
                         (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
 
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+        if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
+            mChildren[mSelectedChild]->activate();
+            return;
+        }
+    }
 
     for (std::vector<Component::Ptr>::size_type i = 0; i < mChildren.size(); ++i) {
 
