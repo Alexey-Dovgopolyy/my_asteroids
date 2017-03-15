@@ -2,6 +2,7 @@
 #define PLAYERSINPUT_H
 
 #include "command.h"
+#include "levelidentifiers.h"
 
 #include <SFML/Window/Event.hpp>
 
@@ -40,6 +41,9 @@ public:
     void            setMissionStatus(MissionStatus status);
     MissionStatus   getMissionStatus() const;
 
+    void            setLevel(Levels::ID level);
+    Levels::ID      getLevel() const;
+
     void            initializeActions();
     bool            isRealtimeAction(Action action);
 
@@ -50,6 +54,7 @@ private:
     std::map<sf::Mouse::Button, Action> mMouseKeyBinding;
     std::map<Action, Command>           mActionBinding;
     MissionStatus                       mCurrentMissionStatus;
+    Levels::ID                          mLevel;
 };
 
 #endif // PLAYERSINPUT_H

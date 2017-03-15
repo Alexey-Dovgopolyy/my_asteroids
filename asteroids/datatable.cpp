@@ -47,20 +47,20 @@ std::vector<LevelData> initializeLevelData()
 {
     std::vector<LevelData> data(Levels::LevelCount);
 
-    data[Levels::Level1].rockAsteroidsCount = 10;
+    data[Levels::Level1].rockAsteroidsCount = 1;
     data[Levels::Level1].iceAsteroidsCount = 0;
 
-    data[Levels::Level2].rockAsteroidsCount = 20;
+    data[Levels::Level2].rockAsteroidsCount = 2;
     data[Levels::Level2].iceAsteroidsCount = 0;
 
-    data[Levels::Level3].rockAsteroidsCount = 10;
-    data[Levels::Level3].iceAsteroidsCount = 10;
+    data[Levels::Level3].rockAsteroidsCount = 3;
+    data[Levels::Level3].iceAsteroidsCount = 1;
 
-    data[Levels::Level4].rockAsteroidsCount = 10;
-    data[Levels::Level4].iceAsteroidsCount = 20;
+    data[Levels::Level4].rockAsteroidsCount = 4;
+    data[Levels::Level4].iceAsteroidsCount = 1;
 
-    data[Levels::Level5].rockAsteroidsCount = 20;
-    data[Levels::Level5].iceAsteroidsCount = 20;
+    data[Levels::Level5].rockAsteroidsCount = 4;
+    data[Levels::Level5].iceAsteroidsCount = 2;
 
     return data;
 }

@@ -14,7 +14,8 @@ namespace {
     const std::vector<LevelData> levelTable = initializeLevelData();
 }
 
-World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
+World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
+             Levels::ID level)
     : mTarget(outputTarget)
     , mWorldView(outputTarget.getDefaultView())
     , mTextures()
@@ -27,7 +28,7 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts)
     , mSpawnPosition(mWorldView.getSize().x / 2.f,
                     mWorldView.getSize().y / 2.f)
     , mPlayerAircraft(nullptr)
-    , mLevel(Levels::Level4)
+    , mLevel(level)
     , mLevelInfo(levelTable[mLevel].rockAsteroidsCount,
                  levelTable[mLevel].iceAsteroidsCount)
 {
@@ -71,6 +72,29 @@ CommandQueue& World::getCommandQueue()
     return mCommandQueue;
 }
 
+bool World::isAnyAsteroidAlive()
+{
+    if (mLevelInfo.iceAsteroidsLeft < 1 &&
+                                mLevelInfo.rockAsteroidsLeft < 1) {
+
+        return static_cast<bool>
+                        (mSceneLayer[MiddleAir]->getChildsCount());
+    }
+}
+
+void World::setLevel(Levels::ID level)
+{
+    mLevel = level;
+
+    mLevelInfo.rockAsteroidsLeft = levelTable[mLevel].rockAsteroidsCount;
+    mLevelInfo.iceAsteroidsLeft = levelTable[mLevel].iceAsteroidsCount;
+}
+
+Levels::ID World::getLevel() const
+{
+    return static_cast<Levels::ID>(mLevel);
+}
+
 void World::buildScene()
 {
     for (std::size_t i = 0; i < LayerCount; ++i) {
@@ -102,7 +126,7 @@ void World::buildScene()
                             mWorldView.getSize().y * 0.01f);
     mSceneLayer[UpperAir]->attachChild(std::move(hpMonitor));
 
-    std::string level = "Level " + std::to_string(mLevel);
+    std::string level = "Level " + std::to_string(mLevel + 1);
     std::unique_ptr<TextNode> levelMonitor(new TextNode(mFonts, level));
     mLevelMonitor = levelMonitor.get();
     mLevelMonitor->setPosition(mWorldView.getSize().x * 0.01f,
@@ -248,7 +272,7 @@ void World::spawnAsteroids(sf::Time dt)
         asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
         asteroid->setVelocity(static_cast<float>(vx), static_cast<float>(vy));
 
-        mSceneLayer[UpperAir]->attachChild(std::move(asteroid));
+        mSceneLayer[MiddleAir]->attachChild(std::move(asteroid));
     }
     else {
         spawnTime += dt;
@@ -313,7 +337,7 @@ void World::createSmallAsteroid(sf::Vector2f &position, Asteroid::Type type)
     int vy = randomInt(100);
     asteroid->setVelocity(vx, vy);
 
-    mSceneLayer[UpperAir]->attachChild(std::move(asteroid));
+    mSceneLayer[MiddleAir]->attachChild(std::move(asteroid));
 }
 
 void World::asteroidSpawnCoordinates(int &x, int &y)

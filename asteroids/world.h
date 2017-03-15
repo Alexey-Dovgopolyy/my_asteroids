@@ -28,13 +28,18 @@ const short rows    = 10;
 class World
 {
 public:
-                    World(sf::RenderTarget& outputTarget,
-                          FontHolder& fonts);
+                    World(sf::RenderTarget& outputTarget, FontHolder& fonts,
+                          Levels::ID level);
 
     void            update(sf::Time dt);
     void            draw();
 
     CommandQueue&   getCommandQueue();
+
+    bool            isAnyAsteroidAlive();
+
+    void            setLevel(Levels::ID level);
+    Levels::ID      getLevel() const;
 
 private:
     void            buildScene();
@@ -67,6 +72,7 @@ private:
 
         Background,
         LowerAir,
+        MiddleAir,
         UpperAir,
         LayerCount
     };

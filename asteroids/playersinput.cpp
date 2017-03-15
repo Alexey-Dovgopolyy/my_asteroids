@@ -45,6 +45,7 @@ struct AircraftRotor {
 PlayersInput::PlayersInput(sf::RenderTarget &window)
     : mWindow(window)
     , mCurrentMissionStatus(MissionRunning)
+    , mLevel(Levels::Level1)
 {
     mKeyBinding[sf::Keyboard::A] = MoveLeft;
     mKeyBinding[sf::Keyboard::D] = MoveRight;
@@ -105,6 +106,16 @@ void PlayersInput::setMissionStatus(MissionStatus status)
 PlayersInput::MissionStatus PlayersInput::getMissionStatus() const
 {
     return mCurrentMissionStatus;
+}
+
+void PlayersInput::setLevel(Levels::ID level)
+{
+    mLevel = level;
+}
+
+Levels::ID PlayersInput::getLevel() const
+{
+    return mLevel;
 }
 
 void PlayersInput::initializeActions()
