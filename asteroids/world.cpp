@@ -80,6 +80,9 @@ bool World::isAnyAsteroidAlive()
         return static_cast<bool>
                         (mSceneLayer[MiddleAir]->getChildsCount());
     }
+    else {
+        return true;
+    }
 }
 
 void World::setLevel(Levels::ID level)
