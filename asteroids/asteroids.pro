@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     container.cpp \
     button.cpp \
     menustate.cpp \
-    statechanginglevel.cpp
+    statechanginglevel.cpp \
+    settingstate.cpp
 
 
 
@@ -67,7 +68,8 @@ HEADERS += \
     container.h \
     button.h \
     menustate.h \
-    statechanginglevel.h
+    statechanginglevel.h \
+    settingstate.h
 
 win32 {
 

@@ -15,6 +15,7 @@ public:
     sf::Vector2f    getVelocity();
 
     int             getHitpoints() const;
+    int             getScore() const;
     void            repair(int points);
     void            damage(int points);
     void            destroy();
@@ -32,7 +33,8 @@ protected:
 private:
     sf::Vector2f        mVelocity;
     int                 mHitpoints;
-    sf::FloatRect       mBoundingRect;
+    const int           mScore;
+    sf::FloatRect       mBoundingRect;    
 };
 
 #endif // ENTITY_H

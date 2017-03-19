@@ -14,7 +14,7 @@ TextNode::TextNode(const FontHolder& fonts,
 void TextNode::setString(const std::string& text)
 {
     mText.setString(text);
-    //centerOrigin(mText);
+    centerOrigin(mText);
 }
 
 void TextNode::drawCurrent(sf::RenderTarget &target,

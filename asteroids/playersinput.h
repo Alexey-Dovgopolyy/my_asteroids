@@ -44,6 +44,9 @@ public:
     void            setLevel(Levels::ID level);
     Levels::ID      getLevel() const;
 
+    void            setScore(int score);
+    int             getScore() const;
+
     void            initializeActions();
     bool            isRealtimeAction(Action action);
 
@@ -55,6 +58,7 @@ private:
     std::map<Action, Command>           mActionBinding;
     MissionStatus                       mCurrentMissionStatus;
     Levels::ID                          mLevel;
+    int                                 mScore;
 };
 
 #endif // PLAYERSINPUT_H

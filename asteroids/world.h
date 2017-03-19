@@ -29,7 +29,7 @@ class World
 {
 public:
                     World(sf::RenderTarget& outputTarget, FontHolder& fonts,
-                          Levels::ID level);
+                          Levels::ID level, int score);
 
     void            update(sf::Time dt);
     void            draw();
@@ -41,10 +41,14 @@ public:
     void            setLevel(Levels::ID level);
     Levels::ID      getLevel() const;
 
+    void            setScore(int score);
+    int             getScore() const;
+
 private:
     void            buildScene();
     void            loadTextures();
 
+    void            updateTextNodes();
     void            adaptPlayerPosition();
     void            adaptAstoriodPosition();
     void            adaptPlayerVelocity();
@@ -96,6 +100,10 @@ private:
 
     TextNode*                           mHPMonitor;
     TextNode*                           mLevelMonitor;
+    TextNode*                           mScoredPointsMonitor;
+
+    int                                 mPlayerHP;
+    int                                 mScoredPoints;
 };
 
 #endif // WORLD_H

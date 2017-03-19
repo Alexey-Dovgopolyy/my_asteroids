@@ -4,7 +4,8 @@
 
 GameState::GameState(StateStack &stack, Context context)
     : State(stack, context)
-    , mWorld(*(context.window), *(context.fonts), context.player->getLevel())
+    , mWorld(*(context.window), *(context.fonts),
+             context.player->getLevel(), context.player->getScore())
     , mPlayer(*(context.player))
 {
     mPlayer.setMissionStatus(PlayersInput::MissionRunning);
@@ -24,9 +25,12 @@ bool GameState::update(sf::Time dt)
 
         if (mWorld.getLevel() == Levels::Level5) {
             mPlayer.setMissionStatus(PlayersInput::MissionSuccess);
+            mPlayer.setLevel(Levels::Level1);
+            mPlayer.setScore(0);
         }
         else {
             mPlayer.setLevel(static_cast<Levels::ID>(mWorld.getLevel() + 1));
+            mPlayer.setScore(mWorld.getScore());
         }
 
         //requestStackPop();

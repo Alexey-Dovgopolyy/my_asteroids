@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "titlestate.h"
 #include "menustate.h"
+#include "settingstate.h"
 #include "statechanginglevel.h"
 #include "stateidentifiers.h"
 
@@ -108,6 +109,7 @@ void Application::registerStates()
 {
     mStateStack.registerState<TitleState>(States::Title);
     mStateStack.registerState<MenuState>(States::Menu);
+    mStateStack.registerState<SettingState>(States::Settings);
     mStateStack.registerState<GameState>(States::Game);
     mStateStack.registerState<ChangingLevelState>(States::Changing);
 }

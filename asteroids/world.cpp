@@ -15,7 +15,7 @@ namespace {
 }
 
 World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
-             Levels::ID level)
+             Levels::ID level, int score)
     : mTarget(outputTarget)
     , mWorldView(outputTarget.getDefaultView())
     , mTextures()
@@ -31,6 +31,8 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
     , mLevel(level)
     , mLevelInfo(levelTable[mLevel].rockAsteroidsCount,
                  levelTable[mLevel].iceAsteroidsCount)
+    , mPlayerHP(200)
+    , mScoredPoints(score)
 {
     loadTextures();
     buildScene();
@@ -49,6 +51,8 @@ void World::update(sf::Time dt)
     adaptPlayerVelocity();
 
     handleCollisions();
+
+    updateTextNodes();
 
     mSceneGraph.removeWrecks();
     spawnAsteroids(dt);
@@ -98,6 +102,16 @@ Levels::ID World::getLevel() const
     return static_cast<Levels::ID>(mLevel);
 }
 
+void World::setScore(int score)
+{
+    mScoredPoints = score;
+}
+
+int World::getScore() const
+{
+    return mScoredPoints;
+}
+
 void World::buildScene()
 {
     for (std::size_t i = 0; i < LayerCount; ++i) {
@@ -125,16 +139,22 @@ void World::buildScene()
     std::cout << hp << std::endl;
     std::unique_ptr<TextNode> hpMonitor(new TextNode(mFonts, hp));
     mHPMonitor = hpMonitor.get();
-    mHPMonitor->setPosition(mWorldView.getSize().x * 0.9f,
-                            mWorldView.getSize().y * 0.01f);
+    mHPMonitor->setPosition(mWorldView.getSize().x * 0.93f,
+                            mWorldView.getSize().y * 0.04f);
     mSceneLayer[UpperAir]->attachChild(std::move(hpMonitor));
 
     std::string level = "Level " + std::to_string(mLevel + 1);
     std::unique_ptr<TextNode> levelMonitor(new TextNode(mFonts, level));
     mLevelMonitor = levelMonitor.get();
-    mLevelMonitor->setPosition(mWorldView.getSize().x * 0.01f,
-                               mWorldView.getSize().y * 0.01f);
+    mLevelMonitor->setPosition(mWorldView.getSize().x * 0.05f,
+                               mWorldView.getSize().y * 0.04f);
     mSceneLayer[UpperAir]->attachChild(std::move(levelMonitor));
+
+    std::unique_ptr<TextNode> scoreMonitor(new TextNode(mFonts, ""));
+    mScoredPointsMonitor = scoreMonitor.get();
+    mScoredPointsMonitor->setPosition(mWorldView.getSize().x / 2.f,
+                                      mWorldView.getSize().y * 0.04f);
+    mSceneLayer[UpperAir]->attachChild(std::move(scoreMonitor));
 }
 
 void World::loadTextures()
@@ -145,6 +165,16 @@ void World::loadTextures()
     mTextures.load(Textures::RockAsteroid,  "Media/Textures/Asteroid1.png");
     mTextures.load(Textures::IceAsteroid,   "Media/Textures/Asteroid3.png");
     mTextures.load(Textures::Explosion,     "Media/Textures/Explosion.png");
+}
+
+void World::updateTextNodes()
+{
+    std::string msg;
+    msg = "HP: " + std::to_string(mPlayerHP);
+    mHPMonitor->setString(msg);
+
+    msg = "Score: " + std::to_string(mScoredPoints);
+    mScoredPointsMonitor->setString(msg);
 }
 
 void World::adaptPlayerPosition()
@@ -406,10 +436,12 @@ void World::handleCollisions()
 
             asteroid.damage(projectile.getDamage());
 
-            if (asteroid.getHitpoints() <= 0 &&
-                    asteroid.getSize() == Asteroid::Size::Solid) {
-                qDebug() << "cat" << asteroid.getCategory();
-                spawnSmallAsteroid(asteroid.getPosition(), asteroid.getCategory());
+            if (asteroid.getHitpoints() <= 0) {
+
+                mScoredPoints += asteroid.getScore();
+                if (asteroid.getSize() == Asteroid::Size::Solid) {
+                    spawnSmallAsteroid(asteroid.getPosition(), asteroid.getCategory());
+                }
             }
 
             projectile.destroy();
@@ -423,11 +455,11 @@ void World::handleCollisions()
             aircraft.damage(asteroid.getHitpoints());
             asteroid.destroy();
 
-            std::string hp = "HP " + std::to_string(aircraft.getHitpoints());
-            mHPMonitor->setString(hp);
+            mPlayerHP = aircraft.getHitpoints();
         }
     }
 }
+
 
 void World::debugShowNodes(std::array<column, nodesCount>& nodes)
 {

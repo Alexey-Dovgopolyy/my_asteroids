@@ -43,6 +43,11 @@ void Component::deactivate()
     mIsActive = false;
 }
 
+bool Component::isToggle()
+{
+    return false;
+}
+
 sf::FloatRect Component::getRect() const
 {
     return sf::FloatRect();

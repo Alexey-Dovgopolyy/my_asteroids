@@ -5,8 +5,8 @@
 Entity::Entity(int hitpoints)
     : mVelocity()
     , mHitpoints(hitpoints)
+    , mScore(hitpoints)
 {
-
 }
 
 void Entity::setVelocity(sf::Vector2f velocity)
@@ -40,6 +40,11 @@ sf::Vector2f Entity::getVelocity()
 int Entity::getHitpoints() const
 {
     return mHitpoints;
+}
+
+int Entity::getScore() const
+{
+    return mScore;
 }
 
 void Entity::repair(int points)

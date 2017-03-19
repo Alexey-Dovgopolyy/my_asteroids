@@ -31,15 +31,48 @@ bool Container::isSelectable() const
 
 void Container::handleEvent(const sf::Event& event)
 {    
+    if (event.key.code == sf::Keyboard::Escape) {
+
+        for (auto button : mChildren) {
+            if (button->isActive()) {
+                qDebug() << "Here";
+                mSelectedChild = 0;
+                button->deactivate();
+                break;
+            }
+        }
+    }
+
+    if (event.type == sf::Event::MouseButtonReleased) {
+
+        sf::Vector2f mousePos =
+                            static_cast<sf::Vector2f>
+                            (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
+
+        if (event.key.code == sf::Mouse::Left) {
+            if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
+
+                for (auto button : mChildren) {
+                    if (button->isActive()) {
+                        button->deactivate();
+                        break;
+                    }
+                }
+
+                mChildren[mSelectedChild]->activate();
+            }
+        }
+    }
+
     if (hasSelection() && mChildren[mSelectedChild]->isActive()) {
        mChildren[mSelectedChild]->handleEvent(event);
     }
     else if (event.type == sf::Event::KeyReleased) {
 
-        if (event.key.code == sf::Keyboard::Up) {
+        if (event.key.code == sf::Keyboard::Down) {
             selectNext();
         }
-        else if (event.key.code == sf::Keyboard::Down) {
+        else if (event.key.code == sf::Keyboard::Up) {
             selectPrevious();
         }
         else if (event.key.code == sf::Keyboard::Return
@@ -47,7 +80,7 @@ void Container::handleEvent(const sf::Event& event)
             if (hasSelection()) {
                 mChildren[mSelectedChild]->activate();
             }
-        }
+        }        
     }
 }
 
@@ -57,25 +90,38 @@ void Container::handleRealtimeInput()
                         static_cast<sf::Vector2f>
                         (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+//    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
-        if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
-            mChildren[mSelectedChild]->activate();
-            return;
-        }
-    }
+//        if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
+
+//            for (auto button : mChildren) {
+//                if (button->isActive()) {
+//                    button->deactivate();
+//                    break;
+//                }
+//            }
+
+//            mChildren[mSelectedChild]->activate();
+//            return;
+//        }
+//    }
 
     for (std::vector<Component::Ptr>::size_type i = 0; i < mChildren.size(); ++i) {
 
         sf::FloatRect bounds = mChildren[i]->getRect();
         if (bounds.contains(mousePos)) {
-            qDebug() << "mouse " << mousePos.x << " " << mousePos.y;
-            qDebug() << "button " << bounds.left << " " << bounds.top;
+//            qDebug() << "mouse " << mousePos.x << " " << mousePos.y;
+//            qDebug() << "button " << bounds.left << " " << bounds.top;
 
             if (hasSelection()) {
                 mChildren[mSelectedChild]->deselect();
             }
-            mChildren[i]->select();
+            if (mChildren[mSelectedChild]->isActive()) {
+                mChildren[mSelectedChild]->activate();
+            }
+            if (!mChildren[i]->isActive()) {
+                mChildren[i]->select();
+            }
             mSelectedChild = static_cast<int>(i);
         }
     }

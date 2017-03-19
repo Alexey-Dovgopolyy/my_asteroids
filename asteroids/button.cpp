@@ -38,6 +38,11 @@ void Button::setToggle(bool flag)
     mIsToggle = flag;
 }
 
+bool Button::isToggle()
+{
+    return mIsToggle;
+}
+
 bool Button::isSelectable() const
 {
     return true;
@@ -96,7 +101,7 @@ sf::FloatRect Button::getRect() const
     sf::FloatRect rect(getPosition().x, getPosition().y,
                        mSprite.getTextureRect().width,
                        mSprite.getTextureRect().height);
-    qDebug() << "pos" << rect.left << " " << rect.top;
+    //qDebug() << "pos" << rect.left << " " << rect.top;
     return rect;
 }
 

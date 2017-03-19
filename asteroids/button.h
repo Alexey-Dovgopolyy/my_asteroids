@@ -35,6 +35,7 @@ public:
     void                setCallback(Callback callback);
     void                setText(const std::string& text);
     void                setToggle(bool flag);
+    virtual bool        isToggle();
 
     virtual bool        isSelectable() const;
     virtual void        select();

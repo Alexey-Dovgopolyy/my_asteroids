@@ -33,6 +33,8 @@ public:
     virtual void    activate();
     virtual void    deactivate();
 
+    virtual bool    isToggle();
+
     virtual void    handleEvent(const sf::Event& event) = 0;
 
     virtual sf::FloatRect getRect() const;

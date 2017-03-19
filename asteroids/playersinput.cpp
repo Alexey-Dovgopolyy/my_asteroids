@@ -46,6 +46,7 @@ PlayersInput::PlayersInput(sf::RenderTarget &window)
     : mWindow(window)
     , mCurrentMissionStatus(MissionRunning)
     , mLevel(Levels::Level1)
+    , mScore(0)
 {
     mKeyBinding[sf::Keyboard::A] = MoveLeft;
     mKeyBinding[sf::Keyboard::D] = MoveRight;
@@ -116,6 +117,16 @@ void PlayersInput::setLevel(Levels::ID level)
 Levels::ID PlayersInput::getLevel() const
 {
     return mLevel;
+}
+
+void PlayersInput::setScore(int score)
+{
+    mScore = score;
+}
+
+int PlayersInput::getScore() const
+{
+    return mScore;
 }
 
 void PlayersInput::initializeActions()
