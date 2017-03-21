@@ -36,6 +36,7 @@ private:
 private:
     std::vector<Component::Ptr>     mChildren;
     int                             mSelectedChild;
+    int                             mActiveChild;
     sf::RenderWindow*               mWindow;
 };
 

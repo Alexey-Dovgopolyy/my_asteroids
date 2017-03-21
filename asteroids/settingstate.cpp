@@ -1,5 +1,6 @@
 #include "settingstate.h"
 #include "resouceholder.h"
+#include "utility.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -13,7 +14,7 @@ SettingState::SettingState(StateStack &stack, Context context)
     addButtonLabel(PlayersInput::MoveDown,  250.f, "MoveDown", context);
     addButtonLabel(PlayersInput::MoveLeft,  300.f, "MoveLeft", context);
     addButtonLabel(PlayersInput::MoveRight, 350.f, "MoveRight", context);
-    addButtonLabel(PlayersInput::Fire,      400.f, "Fire", context);
+    //addButtonLabel(PlayersInput::Fire,      400.f, "Fire", context);
 
     auto backButton = std::make_shared<GUI::Button>(context);
     backButton->setText("Back");
@@ -37,20 +38,48 @@ void SettingState::draw()
 
 bool SettingState::update(sf::Time dt)
 {
+    updateLabels();
     mGUIContainer.handleRealtimeInput();
     return true;
 }
 
 bool SettingState::handleEvent(const sf::Event &event)
 {
-    mGUIContainer.handleEvent(event);
-    return true;
+    bool isKeyBinding = false;
+
+    for (std::size_t action = 0; action < PlayersInput::ActionCount - 1; ++action) {
+
+        if (mBindingButtons[action]->isActive()) {
+            isKeyBinding = true;
+            if (event.type == sf::Event::KeyReleased) {
+                getContext().player->assignKey(static_cast<PlayersInput::Action>(action), event.key.code);
+                mBindingButtons[action]->deactivate();
+            }
+            break;
+        }
+    }
+
+    //if (isKeyBinding) {
+        //updateLabels();
+    //}
+    //else {
+       mGUIContainer.handleEvent(event);
+    //}
+
+    return false;
 }
 
 
 void SettingState::updateLabels()
 {
+    PlayersInput& player = *getContext().player;
 
+    for (std::size_t i = 0; i < PlayersInput::ActionCount - 1; ++i) {
+
+        sf::Keyboard::Key key =
+           player.getAssignedKey(static_cast<PlayersInput::Action>(i));
+        mBindingLabels[i]->setText(toString(key));
+    }
 }
 
 void SettingState::addButtonLabel(PlayersInput::Action action,

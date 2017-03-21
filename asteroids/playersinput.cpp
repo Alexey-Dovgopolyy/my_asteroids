@@ -54,6 +54,7 @@ PlayersInput::PlayersInput(sf::RenderTarget &window)
     mKeyBinding[sf::Keyboard::S] = MoveDown;
 
     mMouseKeyBinding[sf::Mouse::Left] = Fire;
+    mMouseKeyBinding[sf::Mouse::Right] = Fire;
 
     initializeActions();
 
@@ -157,4 +158,40 @@ bool PlayersInput::isRealtimeAction(Action action)
         default:
             return false;
     }
+}
+
+void PlayersInput::assignKey(Action action, sf::Keyboard::Key key)
+{
+    for (auto itr = mKeyBinding.begin(); itr != mKeyBinding.end(); )
+    {
+        if (itr->second == action)
+            mKeyBinding.erase(itr++);
+        else
+            ++itr;
+    }
+
+    mKeyBinding[key] = action;
+}
+
+void PlayersInput::assignKey(Action action, sf::Mouse::Button button)
+{
+    for (auto itr = mMouseKeyBinding.begin(); itr != mMouseKeyBinding.end(); )
+    {
+        if (itr->second == action)
+            mMouseKeyBinding.erase(itr++);
+        else
+            ++itr;
+    }
+
+    mMouseKeyBinding[button] = action;
+}
+
+sf::Keyboard::Key PlayersInput::getAssignedKey(Action action) const
+{
+    for (auto pair : mKeyBinding) {
+        if (pair.second == action) {
+            return pair.first;
+        }
+    }
+    return sf::Keyboard::Unknown;
 }

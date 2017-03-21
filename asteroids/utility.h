@@ -1,7 +1,12 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include <SFML/Graphics/Sprite.hpp>
+//#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
+
+#include <sstream>
 
 namespace sf {
 
@@ -10,6 +15,9 @@ namespace sf {
 }
 
 class Animation;
+
+std::string toString(sf::Keyboard::Key key);
+//std::string toString(sf::Mouse::Button button);
 
 void centerOrigin(sf::Sprite& sprite);
 void centerOrigin(Animation& animation);

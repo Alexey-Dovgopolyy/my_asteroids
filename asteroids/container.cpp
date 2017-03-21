@@ -11,6 +11,7 @@ namespace GUI {
 Container::Container(sf::RenderWindow* window)
     : mChildren()
     , mSelectedChild(-1)
+    , mActiveChild(-1)
     , mWindow(window)
 {
 }
@@ -31,17 +32,7 @@ bool Container::isSelectable() const
 
 void Container::handleEvent(const sf::Event& event)
 {    
-    if (event.key.code == sf::Keyboard::Escape) {
 
-        for (auto button : mChildren) {
-            if (button->isActive()) {
-                qDebug() << "Here";
-                mSelectedChild = 0;
-                button->deactivate();
-                break;
-            }
-        }
-    }
 
     if (event.type == sf::Event::MouseButtonReleased) {
 
@@ -50,16 +41,17 @@ void Container::handleEvent(const sf::Event& event)
                             (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
 
         if (event.key.code == sf::Mouse::Left) {
-            if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
 
-                for (auto button : mChildren) {
-                    if (button->isActive()) {
-                        button->deactivate();
-                        break;
+            for (std::vector<Component::Ptr>::size_type i = 0; i < mChildren.size(); ++i) {
+                if (mChildren[i]->getRect().contains(mousePos)) {
+                    if (mChildren[i]->isActive()) {
+                        mChildren[i]->deactivate();
+                    }
+                    else {
+                        mActiveChild = static_cast<int>(i);
+                        mChildren[i]->activate();
                     }
                 }
-
-                mChildren[mSelectedChild]->activate();
             }
         }
     }
@@ -69,7 +61,18 @@ void Container::handleEvent(const sf::Event& event)
     }
     else if (event.type == sf::Event::KeyReleased) {
 
-        if (event.key.code == sf::Keyboard::Down) {
+        if (event.key.code == sf::Keyboard::Escape) {
+
+            for (auto button : mChildren) {
+                if (button->isActive()) {
+                    mSelectedChild = -1;
+                    mActiveChild = -1;
+                    button->deactivate();
+                    break;
+                }
+            }
+        }
+        else if (event.key.code == sf::Keyboard::Down) {
             selectNext();
         }
         else if (event.key.code == sf::Keyboard::Up) {
@@ -90,39 +93,34 @@ void Container::handleRealtimeInput()
                         static_cast<sf::Vector2f>
                         (sf::Mouse::getPosition(static_cast<sf::RenderWindow&>(*mWindow)));
 
-//    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-//        if (hasSelection() && mChildren[mSelectedChild]->getRect().contains(mousePos)) {
-
-//            for (auto button : mChildren) {
-//                if (button->isActive()) {
-//                    button->deactivate();
-//                    break;
-//                }
-//            }
-
-//            mChildren[mSelectedChild]->activate();
-//            return;
-//        }
-//    }
 
     for (std::vector<Component::Ptr>::size_type i = 0; i < mChildren.size(); ++i) {
 
         sf::FloatRect bounds = mChildren[i]->getRect();
         if (bounds.contains(mousePos)) {
-//            qDebug() << "mouse " << mousePos.x << " " << mousePos.y;
-//            qDebug() << "button " << bounds.left << " " << bounds.top;
 
-            if (hasSelection()) {
-                mChildren[mSelectedChild]->deselect();
+            if (mChildren[i]->isActive()) {
+                if (mSelectedChild != mActiveChild) {
+                    mChildren[mSelectedChild]->deselect();
+                }
             }
-            if (mChildren[mSelectedChild]->isActive()) {
-                mChildren[mSelectedChild]->activate();
-            }
-            if (!mChildren[i]->isActive()) {
+            else {
+                if (!mChildren[mSelectedChild]->isActive()) {
+                    mChildren[mSelectedChild]->deselect();
+                }
                 mChildren[i]->select();
+                mSelectedChild = static_cast<int>(i);
             }
-            mSelectedChild = static_cast<int>(i);
+//            if (hasSelection()) {
+//                mChildren[mSelectedChild]->deselect();
+//            }
+//            if (mChildren[mSelectedChild]->isActive()) {
+//                mChildren[mSelectedChild]->activate();
+//            }
+//            if (!mChildren[i]->isActive()) {
+//                mChildren[i]->select();
+//            }
+            //mSelectedChild = static_cast<int>(i);
         }
     }
 }

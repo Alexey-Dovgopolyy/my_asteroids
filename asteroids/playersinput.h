@@ -50,6 +50,10 @@ public:
     void            initializeActions();
     bool            isRealtimeAction(Action action);
 
+    void            assignKey(Action action, sf::Keyboard::Key key);
+    void            assignKey(Action action, sf::Mouse::Button button);
+    sf::Keyboard::Key getAssignedKey(Action action) const;
+
 private:
     sf::RenderTarget&                   mWindow;
 
