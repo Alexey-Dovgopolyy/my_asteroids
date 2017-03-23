@@ -9,9 +9,10 @@ namespace Category {
         PlayerAircraft      = 1 << 1,
         RockAsteroid        = 1 << 2,
         IceAsteroid         = 1 << 3,
-        AlliedProjectile    = 1 << 4,
+        FireAsteroid        = 1 << 4,
+        AlliedProjectile    = 1 << 5,
 
-        Asteroid = RockAsteroid | IceAsteroid
+        Asteroid = RockAsteroid | IceAsteroid | FireAsteroid
     };
 
 }

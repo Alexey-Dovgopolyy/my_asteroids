@@ -30,7 +30,8 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
     , mPlayerAircraft(nullptr)
     , mLevel(level)
     , mLevelInfo(levelTable[mLevel].rockAsteroidsCount,
-                 levelTable[mLevel].iceAsteroidsCount)
+                 levelTable[mLevel].iceAsteroidsCount,
+                 levelTable[mLevel].fireAsteroidsCount)
     , mPlayerHP(200)
     , mScoredPoints(score)
 {
@@ -78,9 +79,13 @@ CommandQueue& World::getCommandQueue()
 
 bool World::isAnyAsteroidAlive()
 {
+    qDebug() << "Level" << mLevel;
+    qDebug() << "fire in table" << levelTable[mLevel].fireAsteroidsCount;
     if (mLevelInfo.iceAsteroidsLeft < 1 &&
-                                mLevelInfo.rockAsteroidsLeft < 1) {
+            mLevelInfo.rockAsteroidsLeft < 1 &&
+                mLevelInfo.fireAsteroidsLeft < 1) {
 
+        qDebug() << mSceneLayer[MiddleAir]->getChildsCount();
         return static_cast<bool>
                         (mSceneLayer[MiddleAir]->getChildsCount());
     }
@@ -95,6 +100,7 @@ void World::setLevel(Levels::ID level)
 
     mLevelInfo.rockAsteroidsLeft = levelTable[mLevel].rockAsteroidsCount;
     mLevelInfo.iceAsteroidsLeft = levelTable[mLevel].iceAsteroidsCount;
+    mLevelInfo.fireAsteroidsLeft = levelTable[mLevel].fireAsteroidsCount;
 }
 
 Levels::ID World::getLevel() const
@@ -164,6 +170,7 @@ void World::loadTextures()
     mTextures.load(Textures::Entities,      "Media/Textures/Entities.png");
     mTextures.load(Textures::RockAsteroid,  "Media/Textures/Asteroid1.png");
     mTextures.load(Textures::IceAsteroid,   "Media/Textures/Asteroid3.png");
+    mTextures.load(Textures::FireAsteroid,  "Media/Textures/Asteroid4.png");
     mTextures.load(Textures::Explosion,     "Media/Textures/Explosion.png");
 }
 
@@ -302,6 +309,12 @@ void World::spawnAsteroids(sf::Time dt)
 
         int vx = randomInt(100);
         int vy = randomInt(100);
+
+        if (asteroid->getCategory() & Category::FireAsteroid) {
+            vx *= 2;
+            vy *= 2;
+        }
+
         asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
         asteroid->setVelocity(static_cast<float>(vx), static_cast<float>(vy));
 
@@ -314,7 +327,7 @@ void World::spawnAsteroids(sf::Time dt)
 
 Asteroid::Type World::determineAsteroidType()
 {
-    Asteroid::Type type = static_cast<Asteroid::Type>(randomInt(2));
+    Asteroid::Type type = static_cast<Asteroid::Type>(randomInt(3));
 
     if (type == Asteroid::Rock) {
         if (mLevelInfo.rockAsteroidsLeft < 1 && mLevelInfo.iceAsteroidsLeft > 0) {
@@ -324,6 +337,11 @@ Asteroid::Type World::determineAsteroidType()
     else if (type == Asteroid::Ice) {
         if (mLevelInfo.iceAsteroidsLeft < 1 && mLevelInfo.rockAsteroidsLeft > 0) {
             type = Asteroid::Rock;
+        }
+    }
+    else if (type == Asteroid::Fire) {
+        if (mLevelInfo.fireAsteroidsLeft < 1) {
+            if ()
         }
     }
 
@@ -338,6 +356,10 @@ bool World::decreaseAsteroidsCount(Asteroid::Type type)
     }
     else if (type == Asteroid::Ice && mLevelInfo.iceAsteroidsLeft > 0) {
         --mLevelInfo.iceAsteroidsLeft;
+        return true;
+    }
+    else if (type == Asteroid::Fire && mLevelInfo.fireAsteroidsLeft > 0) {
+        --mLevelInfo.fireAsteroidsLeft;
         return true;
     }
     return false;
@@ -357,7 +379,6 @@ void World::spawnSmallAsteroid(sf::Vector2f position, unsigned int category)
             createSmallAsteroid(position, Asteroid::Ice);
         }
     }
-
 }
 
 void World::createSmallAsteroid(sf::Vector2f &position, Asteroid::Type type)
@@ -461,20 +482,11 @@ void World::handleCollisions()
 }
 
 
-void World::debugShowNodes(std::array<column, nodesCount>& nodes)
-{
-    std::cout << "==================================" << std::endl;
-    for (int i = 0; i < nodesCount; ++i) {
-        for (int j = 0; j < nodesCount; ++j) {
-            std::cout << nodes[i][j].size() << " ";
-        }
-        std::cout << std::endl;
-    }
-}
+
 
 void World::spawnIceAsteroid()
 {
-    std::unique_ptr<Asteroid> asteroid(new Asteroid(Asteroid::Ice,
+    std::unique_ptr<Asteroid> asteroid(new Asteroid(Asteroid::Fire,
                                                     Asteroid::Size::Solid,
                                                     2, mTextures));
 
@@ -490,5 +502,5 @@ void World::spawnIceAsteroid()
     asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
     asteroid->setVelocity(static_cast<float>(vx), static_cast<float>(vy));
 
-    mSceneLayer[UpperAir]->attachChild(std::move(asteroid));
+    mSceneLayer[MiddleAir]->attachChild(std::move(asteroid));
 }

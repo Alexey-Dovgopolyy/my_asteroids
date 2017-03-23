@@ -35,6 +35,7 @@ struct LevelData {
 
     int                 rockAsteroidsCount;
     int                 iceAsteroidsCount;
+    int                 fireAsteroidsCount;
 };
 
 std::vector<AircraftData>   initializeAircraftData();

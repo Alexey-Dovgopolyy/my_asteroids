@@ -15,14 +15,16 @@ namespace Levels {
 
 struct LevelInfo {
 
-    LevelInfo(int rock, int ice)
+    LevelInfo(int rock, int ice, int fire)
         : rockAsteroidsLeft(rock)
         , iceAsteroidsLeft(ice)
+        , fireAsteroidsLeft(fire)
     {
     }
 
     int rockAsteroidsLeft;
     int iceAsteroidsLeft;
+    int fireAsteroidsLeft;
 };
 
 #endif // LEVELIDENTIFIERS_H

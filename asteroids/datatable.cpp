@@ -40,6 +40,15 @@ std::vector<AsteroidData> initializeAsteroidData()
     data[Asteroid::Ice].spritePosition  = 75;
     data[Asteroid::Ice].rotateTime      = sf::seconds(0.05f);
 
+    data[Asteroid::Fire].speed           = { 50, 100, 140 };
+    data[Asteroid::Fire].wrecksCount     = 0;
+    data[Asteroid::Fire].hitpoints       = 50;
+    data[Asteroid::Fire].damage          = 100;
+    data[Asteroid::Fire].texture         = Textures::FireAsteroid;
+    data[Asteroid::Fire].textureRect     = sf::IntRect(0, 0, 100, 100);
+    data[Asteroid::Fire].spritePosition  = 75;
+    data[Asteroid::Fire].rotateTime      = sf::seconds(0.05f);
+
     return data;
 }
 
@@ -49,18 +58,23 @@ std::vector<LevelData> initializeLevelData()
 
     data[Levels::Level1].rockAsteroidsCount = 1;
     data[Levels::Level1].iceAsteroidsCount = 0;
+    data[Levels::Level1].fireAsteroidsCount = 0;
 
     data[Levels::Level2].rockAsteroidsCount = 2;
     data[Levels::Level2].iceAsteroidsCount = 0;
+    data[Levels::Level2].fireAsteroidsCount = 0;
 
     data[Levels::Level3].rockAsteroidsCount = 3;
     data[Levels::Level3].iceAsteroidsCount = 1;
+    data[Levels::Level3].fireAsteroidsCount = 0;
 
     data[Levels::Level4].rockAsteroidsCount = 4;
     data[Levels::Level4].iceAsteroidsCount = 1;
+    data[Levels::Level4].fireAsteroidsCount = 2;
 
     data[Levels::Level5].rockAsteroidsCount = 4;
     data[Levels::Level5].iceAsteroidsCount = 2;
+    data[Levels::Level5].fireAsteroidsCount = 4;
 
     return data;
 }

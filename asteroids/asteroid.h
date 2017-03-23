@@ -20,6 +20,7 @@ public:
     enum Type {
         Rock,
         Ice,
+        Fire,
         TypeCount
     };
 
@@ -45,7 +46,7 @@ private:
     virtual void drawCurrent(sf::RenderTarget &target,
                                                 sf::RenderStates states) const;
 
-    void initializeTexturesMap();
+    //void initializeTexturesMap();
 
 private:
     Type            mType;

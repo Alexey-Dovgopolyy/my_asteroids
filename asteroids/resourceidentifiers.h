@@ -20,7 +20,8 @@ namespace Textures {
         Explosion,
         Particle,
         RockAsteroid,
-        IceAsteroid
+        IceAsteroid,
+        FireAsteroid
     };
 }
 

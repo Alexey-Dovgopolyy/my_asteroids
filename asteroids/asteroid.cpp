@@ -41,6 +41,8 @@ unsigned int Asteroid::getCategory() const
         return Category::RockAsteroid;
     else if (mType == Ice)
         return Category::IceAsteroid;
+    else if (mType == Fire)
+        return Category::FireAsteroid;
 
     return Category::RockAsteroid;
 }
@@ -110,14 +112,14 @@ void Asteroid::drawCurrent(sf::RenderTarget &target,
     }
 }
 
-void Asteroid::initializeTexturesMap()
-{
-    mTexturesMap[0] = sf::IntRect(0, 175, 90, 90);
-    mTexturesMap[1] = sf::IntRect(80, 175, 90, 90);
-    mTexturesMap[2] = sf::IntRect(160, 175, 90, 90);
-    mTexturesMap[3] = sf::IntRect(240, 175, 90, 90);
-    mTexturesMap[4] = sf::IntRect(300, 175, 90, 90);
-    mTexturesMap[5] = sf::IntRect(380, 175, 90, 90);
-    mTexturesMap[6] = sf::IntRect(460, 175, 90, 90);
-    mTexturesMap[7] = sf::IntRect(540, 175, 90, 90);
-}
+//void Asteroid::initializeTexturesMap()
+//{
+//    mTexturesMap[0] = sf::IntRect(0, 175, 90, 90);
+//    mTexturesMap[1] = sf::IntRect(80, 175, 90, 90);
+//    mTexturesMap[2] = sf::IntRect(160, 175, 90, 90);
+//    mTexturesMap[3] = sf::IntRect(240, 175, 90, 90);
+//    mTexturesMap[4] = sf::IntRect(300, 175, 90, 90);
+//    mTexturesMap[5] = sf::IntRect(380, 175, 90, 90);
+//    mTexturesMap[6] = sf::IntRect(460, 175, 90, 90);
+//    mTexturesMap[7] = sf::IntRect(540, 175, 90, 90);
+//}

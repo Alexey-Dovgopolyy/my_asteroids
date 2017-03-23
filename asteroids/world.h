@@ -68,7 +68,6 @@ private:
     void            handleCollisions();
 
     // some debug functions
-    void            debugShowNodes(std::array<column, nodesCount> &nodes);
     void            spawnIceAsteroid();
 
 private:
