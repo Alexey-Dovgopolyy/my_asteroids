@@ -29,7 +29,7 @@ std::vector<AsteroidData> initializeAsteroidData()
     data[Asteroid::Rock].damage         = 20;
     data[Asteroid::Rock].texture        = Textures::RockAsteroid;
     data[Asteroid::Rock].textureRect    = sf::IntRect(0, 202, 100, 82);
-    data[Asteroid::Rock].spritePosition = 75;
+    data[Asteroid::Rock].spritePosition = 100;
     data[Asteroid::Rock].rotateTime     = sf::seconds(0.05f);
 
     data[Asteroid::Ice].speed           = { 50, 100, 140 };
@@ -46,8 +46,8 @@ std::vector<AsteroidData> initializeAsteroidData()
     data[Asteroid::Fire].hitpoints       = 50;
     data[Asteroid::Fire].damage          = 100;
     data[Asteroid::Fire].texture         = Textures::FireAsteroid;
-    data[Asteroid::Fire].textureRect     = sf::IntRect(0, 0, 100, 100);
-    data[Asteroid::Fire].spritePosition  = 75;
+    data[Asteroid::Fire].textureRect     = sf::IntRect(0, 0, 85, 80);
+    data[Asteroid::Fire].spritePosition  = 180;
     data[Asteroid::Fire].rotateTime      = sf::seconds(0.05f);
 
     return data;
@@ -59,7 +59,7 @@ std::vector<ParticleData> initializeParticleData()
     std::vector<ParticleData> data(Particle::ParticleCount);
 
     data[Particle::Tail].color = sf::Color(255, 255, 50);
-    data[Particle::Tail].lifetime = sf::seconds(2.0f);
+    data[Particle::Tail].lifetime = sf::seconds(1.0f);
 
     return data;
 }

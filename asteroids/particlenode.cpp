@@ -23,12 +23,13 @@ ParticleNode::ParticleNode(Particle::Type type,
 {
 }
 
-void ParticleNode::addParticle(sf::Vector2f position)
+void ParticleNode::addParticle(sf::Vector2f position, sf::Vector2f velocity)
 {
     Particle particle;
     particle.position = position;
     particle.color = Table[mType].color;
     particle.lifetime = Table[mType].lifetime;
+    particle.velocity = velocity;
 
     mParticles.push_back(particle);
 }
@@ -54,6 +55,9 @@ void ParticleNode::updateCurrent(sf::Time dt, CommandQueue& commands)
 
     for (Particle& particle : mParticles) {
         particle.lifetime -= dt;
+
+//        particle.position.x += particle.velocity.x;
+//        particle.position.y += particle.velocity.y;
     }
 
     mNeedsVertexUpdate = true;

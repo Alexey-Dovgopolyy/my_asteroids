@@ -80,13 +80,13 @@ CommandQueue& World::getCommandQueue()
 
 bool World::isAnyAsteroidAlive()
 {
-    qDebug() << "Level" << mLevel;
-    qDebug() << "fire in table" << levelTable[mLevel].fireAsteroidsCount;
+    //qDebug() << "Level" << mLevel;
+    //qDebug() << "fire in table" << levelTable[mLevel].fireAsteroidsCount;
     if (mLevelInfo.iceAsteroidsLeft < 1 &&
             mLevelInfo.rockAsteroidsLeft < 1 &&
                 mLevelInfo.fireAsteroidsLeft < 1) {
 
-        qDebug() << mSceneLayer[MiddleAir]->getChildsCount();
+        //qDebug() << mSceneLayer[MiddleAir]->getChildsCount();
         return static_cast<bool>
                         (mSceneLayer[MiddleAir]->getChildsCount());
     }
@@ -324,6 +324,7 @@ void World::spawnAsteroids(sf::Time dt)
         if (asteroid->getCategory() & Category::FireAsteroid) {
             vx *= 2;
             vy *= 2;
+            asteroid->createParticleEmitter();
         }
 
         asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
@@ -511,6 +512,7 @@ void World::spawnIceAsteroid()
     int vy = randomInt(100);
     asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
     asteroid->setVelocity(static_cast<float>(vx), static_cast<float>(vy));
+    asteroid->createParticleEmitter();
 
     mSceneLayer[MiddleAir]->attachChild(std::move(asteroid));
 }

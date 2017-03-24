@@ -5,6 +5,7 @@
 #include "resourceidentifiers.h"
 #include "datatable.h"
 #include "animation.h"
+#include "emitternode.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -37,6 +38,7 @@ public:
     float                   getMaxSpeed() const;
     int                     getDamage() const;
     unsigned int            getSize() const;
+    void                    createParticleEmitter();
 
     virtual void            remove();
     virtual bool            isMarkedForRemoval() const;
@@ -64,7 +66,8 @@ private:
     int             mMaxSpeed;
     int             mDamage;
 
-    std::map<short, sf::IntRect> mTexturesMap;
+    EmitterNode*    mTail;
+    std::map<short, sf::IntRect>    mTexturesMap;
 };
 
 #endif // ASTEROID_H

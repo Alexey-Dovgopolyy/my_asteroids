@@ -1,7 +1,6 @@
 #include "asteroid.h"
 #include "resouceholder.h"
 #include "utility.h"
-#include "emitternode.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -21,6 +20,7 @@ Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &texture
     , mShowExplosion(true)
     , mMaxSpeed(Table[type].speed[speed])
     , mDamage(Table[type].damage)
+    , mTail(nullptr)
 {
     mExplosion.setFrameSize(sf::Vector2i(256, 256));
     mExplosion.setNumFrames(16);
@@ -36,8 +36,9 @@ Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &texture
     setRect(mSprite.getGlobalBounds());
 
     if (type == Fire) {
-        std::unique_ptr<EmitterNode> tail(new EmitterNode(Particle::Tail));
+        std::unique_ptr<EmitterNode> tail(new EmitterNode(Particle::Tail, getVelocity()));
         tail->setPosition(getPosition().x, getPosition().y);
+        mTail = tail.get();
         attachChild(std::move(tail));
     }
 }
@@ -74,6 +75,14 @@ unsigned int Asteroid::getSize() const
     return mSize;
 }
 
+void Asteroid::createParticleEmitter()
+{
+//    std::unique_ptr<EmitterNode> tail(new EmitterNode(Particle::Tail, getVelocity()));
+//    tail->setPosition(getPosition().x, getPosition().y);
+//    attachChild(std::move(tail));
+
+}
+
 void Asteroid::remove()
 {
     Entity::remove();
@@ -90,6 +99,9 @@ void Asteroid::updateCurrent(sf::Time dt, CommandQueue &commands)
 {
     if (isDestroyed()) {
         mExplosion.update(dt);
+        if (mTail) {
+            mTail->setIsDestroyed(true);
+        }
         return;
     }
 

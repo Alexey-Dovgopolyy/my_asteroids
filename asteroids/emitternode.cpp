@@ -2,17 +2,24 @@
 #include "particlenode.h"
 #include "command.h"
 #include "commandqueue.h"
+#include <QDebug>
 
-EmitterNode::EmitterNode(Particle::Type type)
+EmitterNode::EmitterNode(Particle::Type type, sf::Vector2f velocity)
     : SceneNode()
     , mAccumulatedTime(sf::Time::Zero)
     , mType(type)
     , mParticleSystem(nullptr)
+    , mAsteroidVelocity(velocity)
+    , mIsDestroyed(false)
 {
 }
 
 void EmitterNode::updateCurrent(sf::Time dt, CommandQueue &commands)
 {
+    if(mIsDestroyed) {
+        return;
+    }
+
     if (mParticleSystem) {
         emitParticles(dt);
     }
@@ -38,8 +45,18 @@ void EmitterNode::emitParticles(sf::Time dt)
 
     mAccumulatedTime += dt;
 
+    sf::Vector2f particleVelocity;
+    particleVelocity.x = 40.f;
+    particleVelocity.y = (mAsteroidVelocity.x * particleVelocity.x) / mAsteroidVelocity.y;
+
     while (mAccumulatedTime > interval) {
         mAccumulatedTime -= interval;
-        mParticleSystem->addParticle(getWorldPosition());
+        qDebug() << "ParticlePos" << getWorldPosition().x << " " << getWorldPosition().y;
+        mParticleSystem->addParticle(getWorldPosition(), particleVelocity);
     }
+}
+
+void EmitterNode::setIsDestroyed(bool flag)
+{
+    mIsDestroyed = flag;
 }

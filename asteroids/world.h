@@ -19,11 +19,6 @@
 #include <vector>
 #include <set>
 
-const short columns = 10;
-const short rows    = 10;
-
-//const short nodesCount = 10;
-//using column = std::array<std::vector<SceneNode*>, nodesCount>;
 
 class World
 {

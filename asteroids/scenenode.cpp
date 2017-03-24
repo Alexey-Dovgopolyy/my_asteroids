@@ -168,7 +168,7 @@ void SceneNode::draw(sf::RenderTarget& target,
     states.transform *= getTransform();
     drawCurrent(target, states);
     drawChildren(target, states);
-    //drawBoundingRect(target, states);
+    drawBoundingRect(target, states);
 }
 
 void SceneNode::drawCurrent(sf::RenderTarget&,
