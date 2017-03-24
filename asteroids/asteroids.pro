@@ -34,7 +34,10 @@ SOURCES += main.cpp \
     button.cpp \
     menustate.cpp \
     statechanginglevel.cpp \
-    settingstate.cpp
+    settingstate.cpp \
+    emitternode.cpp \
+    particlenode.cpp \
+    particle.cpp
 
 
 
@@ -69,7 +72,10 @@ HEADERS += \
     button.h \
     menustate.h \
     statechanginglevel.h \
-    settingstate.h
+    settingstate.h \
+    emitternode.h \
+    particlenode.h \
+    particle.h
 
 win32 {
 

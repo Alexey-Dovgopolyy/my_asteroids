@@ -1,6 +1,7 @@
 #include "asteroid.h"
 #include "resouceholder.h"
 #include "utility.h"
+#include "emitternode.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -33,6 +34,12 @@ Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &texture
     centerOrigin(mSprite);
     centerOrigin(mExplosion);
     setRect(mSprite.getGlobalBounds());
+
+    if (type == Fire) {
+        std::unique_ptr<EmitterNode> tail(new EmitterNode(Particle::Tail));
+        tail->setPosition(getPosition().x, getPosition().y);
+        attachChild(std::move(tail));
+    }
 }
 
 unsigned int Asteroid::getCategory() const

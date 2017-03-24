@@ -1,6 +1,7 @@
 #include "datatable.h"
 #include "asteroid.h"
 #include "aircraft.h"
+#include "particle.h"
 #include "levelidentifiers.h"
 
 #include <QDebug>
@@ -51,6 +52,18 @@ std::vector<AsteroidData> initializeAsteroidData()
 
     return data;
 }
+
+
+std::vector<ParticleData> initializeParticleData()
+{
+    std::vector<ParticleData> data(Particle::ParticleCount);
+
+    data[Particle::Tail].color = sf::Color(255, 255, 50);
+    data[Particle::Tail].lifetime = sf::seconds(2.0f);
+
+    return data;
+}
+
 
 std::vector<LevelData> initializeLevelData()
 {

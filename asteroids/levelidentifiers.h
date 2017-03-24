@@ -1,6 +1,8 @@
 #ifndef LEVELIDENTIFIERS_H
 #define LEVELIDENTIFIERS_H
 
+#include "asteroid.h"
+
 namespace Levels {
 
     enum ID {
@@ -20,6 +22,22 @@ struct LevelInfo {
         , iceAsteroidsLeft(ice)
         , fireAsteroidsLeft(fire)
     {
+    }
+
+    bool isAsteroidAvailable(Asteroid::Type type) {
+
+        if (type == Asteroid::Rock && rockAsteroidsLeft > 0) {
+            return true;
+        }
+        else if (type == Asteroid::Ice && iceAsteroidsLeft > 0) {
+            return true;
+        }
+        else if (type == Asteroid::Fire && fireAsteroidsLeft > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     int rockAsteroidsLeft;

@@ -1,5 +1,6 @@
 #include "world.h"
 #include "datatable.h"
+#include "particlenode.h"
 
 #include <QDebug>
 #include <algorithm>
@@ -37,7 +38,7 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
 {
     loadTextures();
     buildScene();
-    //spawnIceAsteroid();
+    spawnIceAsteroid();
     qDebug() << "info" << mLevelInfo.rockAsteroidsLeft
              << mLevelInfo.iceAsteroidsLeft;
 }
@@ -129,18 +130,25 @@ void World::buildScene()
         mSceneGraph.attachChild(std::move(layer));
     }
 
+    //=====Background Space=====
     sf::Texture& spaceTexture = mTextures.get(Textures::Space);
     std::unique_ptr<SpriteNode> spaceSprite
                                     (new SpriteNode(spaceTexture));
     spaceSprite->setPosition(0.f, 0.f);
     mSceneLayer[Background]->attachChild(std::move(spaceSprite));
 
+    //=====Particle System=====
+    std::unique_ptr<ParticleNode> tailNode(new ParticleNode(Particle::Tail, mTextures));
+    mSceneLayer[LowerAir]->attachChild(std::move(tailNode));
+
+    //=====Players Aircraft======
     std::unique_ptr<Aircraft> playerAircraft
                     (new Aircraft(Aircraft::Eagle, mTextures));
     mPlayerAircraft = playerAircraft.get();
     mSceneLayer[UpperAir]->attachChild(std::move(playerAircraft));
     mPlayerAircraft->setPosition(mSpawnPosition);
 
+    //=====HP Text=====
     std::string hp = "HP " + std::to_string(mPlayerAircraft->getHitpoints());
     std::cout << hp << std::endl;
     std::unique_ptr<TextNode> hpMonitor(new TextNode(mFonts, hp));
@@ -149,6 +157,7 @@ void World::buildScene()
                             mWorldView.getSize().y * 0.04f);
     mSceneLayer[UpperAir]->attachChild(std::move(hpMonitor));
 
+    //=====Level Text=====
     std::string level = "Level " + std::to_string(mLevel + 1);
     std::unique_ptr<TextNode> levelMonitor(new TextNode(mFonts, level));
     mLevelMonitor = levelMonitor.get();
@@ -156,6 +165,7 @@ void World::buildScene()
                                mWorldView.getSize().y * 0.04f);
     mSceneLayer[UpperAir]->attachChild(std::move(levelMonitor));
 
+    //=====Score Text=====
     std::unique_ptr<TextNode> scoreMonitor(new TextNode(mFonts, ""));
     mScoredPointsMonitor = scoreMonitor.get();
     mScoredPointsMonitor->setPosition(mWorldView.getSize().x / 2.f,
@@ -171,6 +181,7 @@ void World::loadTextures()
     mTextures.load(Textures::RockAsteroid,  "Media/Textures/Asteroid1.png");
     mTextures.load(Textures::IceAsteroid,   "Media/Textures/Asteroid3.png");
     mTextures.load(Textures::FireAsteroid,  "Media/Textures/Asteroid4.png");
+    mTextures.load(Textures::Particle,      "Media/Textures/Particle.png");
     mTextures.load(Textures::Explosion,     "Media/Textures/Explosion.png");
 }
 
@@ -327,25 +338,24 @@ void World::spawnAsteroids(sf::Time dt)
 
 Asteroid::Type World::determineAsteroidType()
 {
-    Asteroid::Type type = static_cast<Asteroid::Type>(randomInt(3));
 
-    if (type == Asteroid::Rock) {
-        if (mLevelInfo.rockAsteroidsLeft < 1 && mLevelInfo.iceAsteroidsLeft > 0) {
-            type = Asteroid::Ice;
-        }
-    }
-    else if (type == Asteroid::Ice) {
-        if (mLevelInfo.iceAsteroidsLeft < 1 && mLevelInfo.rockAsteroidsLeft > 0) {
-            type = Asteroid::Rock;
-        }
-    }
-    else if (type == Asteroid::Fire) {
-        if (mLevelInfo.fireAsteroidsLeft < 1) {
-            if ()
+    std::vector<Asteroid::Type> typesToChoose;
+
+    for (std::size_t i = 0; i < Asteroid::TypeCount; ++i) {
+
+        Asteroid::Type type = static_cast<Asteroid::Type>(i);
+        if (mLevelInfo.isAsteroidAvailable(type)) {
+            typesToChoose.push_back(type);
         }
     }
 
-    return type;
+    if (!typesToChoose.empty()) {
+        int index = randomInt(typesToChoose.size());
+        return typesToChoose[index];
+    }
+    else {
+        return Asteroid::Rock;
+    }
 }
 
 bool World::decreaseAsteroidsCount(Asteroid::Type type)
