@@ -44,6 +44,10 @@ bool GameState::update(sf::Time dt)
 
 bool GameState::handleEvent(const sf::Event &event)
 {
+    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+        requestStackPush(States::Pause);
+    }
+
     mPlayer.handleEvent(event, mWorld.getCommandQueue());
     return true;
 }

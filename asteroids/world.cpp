@@ -38,7 +38,7 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
 {
     loadTextures();
     buildScene();
-    spawnIceAsteroid();
+    //spawnIceAsteroid();
     qDebug() << "info" << mLevelInfo.rockAsteroidsLeft
              << mLevelInfo.iceAsteroidsLeft;
 }
@@ -324,6 +324,10 @@ void World::spawnAsteroids(sf::Time dt)
         if (asteroid->getCategory() & Category::FireAsteroid) {
             vx *= 2;
             vy *= 2;
+            if (vx < 100)
+                vx = 100;
+            if (vy < 100)
+                vy = 100;
             asteroid->createParticleEmitter();
         }
 

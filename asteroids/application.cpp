@@ -5,6 +5,7 @@
 #include "menustate.h"
 #include "settingstate.h"
 #include "statechanginglevel.h"
+#include "pausestate.h"
 #include "stateidentifiers.h"
 
 #include <QTime>
@@ -112,4 +113,5 @@ void Application::registerStates()
     mStateStack.registerState<SettingState>(States::Settings);
     mStateStack.registerState<GameState>(States::Game);
     mStateStack.registerState<ChangingLevelState>(States::Changing);
+    mStateStack.registerState<PauseState>(States::Pause);
 }

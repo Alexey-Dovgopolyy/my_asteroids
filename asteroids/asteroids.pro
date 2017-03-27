@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     settingstate.cpp \
     emitternode.cpp \
     particlenode.cpp \
-    particle.cpp
+    particle.cpp \
+    pausestate.cpp
 
 
 
@@ -75,7 +76,8 @@ HEADERS += \
     settingstate.h \
     emitternode.h \
     particlenode.h \
-    particle.h
+    particle.h \
+    pausestate.h
 
 win32 {
 
