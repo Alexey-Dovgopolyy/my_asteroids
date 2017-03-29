@@ -16,7 +16,7 @@ namespace {
 }
 
 World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
-             Levels::ID level, int score)
+             Levels::ID level, int score, int hitpoints)
     : mTarget(outputTarget)
     , mWorldView(outputTarget.getDefaultView())
     , mTextures()
@@ -33,7 +33,7 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
     , mLevelInfo(levelTable[mLevel].rockAsteroidsCount,
                  levelTable[mLevel].iceAsteroidsCount,
                  levelTable[mLevel].fireAsteroidsCount)
-    , mPlayerHP(200)
+    , mPlayerHP(hitpoints)
     , mScoredPoints(score)
 {
     loadTextures();
@@ -78,6 +78,12 @@ CommandQueue& World::getCommandQueue()
     return mCommandQueue;
 }
 
+bool World::isPlayerDead()
+{
+    return (mPlayerAircraft->getHitpoints() <= 0 &&
+            mPlayerAircraft->isAnimationFinnished());
+}
+
 bool World::isAnyAsteroidAlive()
 {
     //qDebug() << "Level" << mLevel;
@@ -117,6 +123,11 @@ void World::setScore(int score)
 int World::getScore() const
 {
     return mScoredPoints;
+}
+
+int World::getHitpoints() const
+{
+    return mPlayerHP;
 }
 
 void World::buildScene()
@@ -324,10 +335,12 @@ void World::spawnAsteroids(sf::Time dt)
         if (asteroid->getCategory() & Category::FireAsteroid) {
             vx *= 2;
             vy *= 2;
-            if (vx < 100)
+            if (vx < 100) {
                 vx = 100;
-            if (vy < 100)
+            }
+            else if (vy < 100) {
                 vy = 100;
+            }
             asteroid->createParticleEmitter();
         }
 

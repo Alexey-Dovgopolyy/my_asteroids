@@ -28,11 +28,16 @@ ChangingLevelState::ChangingLevelState(StateStack &stack,
         message = "CONGRATULATIONS\n";
         if (context.player->getMissionStatus() ==
                                         PlayersInput::MissionRunning) {
-            message += "next level "
-                    + std::to_string(mPlayer.getLevel());
+            message += "Level "
+                    + std::to_string(mPlayer.getLevel())
+                    + " completed";
+        }
+        else if (context.player->getMissionStatus() ==
+                                        PlayersInput::MissionSuccess){
+            message += "Mission successful!";
         }
         else {
-            message += "Mission successful!";
+            message += "Game over\nPlayer killed";
         }
     }
     mText.setString(message);

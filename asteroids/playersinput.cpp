@@ -46,6 +46,7 @@ PlayersInput::PlayersInput(sf::RenderTarget &window)
     : mWindow(window)
     , mCurrentMissionStatus(MissionRunning)
     , mLevel(Levels::Level1)
+    , mHitpoints(mLevel == Levels::Level1 ? 200 : 0)
     , mScore(0)
 {
     mKeyBinding[sf::Keyboard::A] = MoveLeft;
@@ -128,6 +129,16 @@ void PlayersInput::setScore(int score)
 int PlayersInput::getScore() const
 {
     return mScore;
+}
+
+void PlayersInput::setHitpoints(int points)
+{
+    mHitpoints = points;
+}
+
+int PlayersInput::getHitpoints() const
+{
+    return mHitpoints;
 }
 
 void PlayersInput::initializeActions()

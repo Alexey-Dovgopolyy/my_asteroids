@@ -24,13 +24,14 @@ class World
 {
 public:
                     World(sf::RenderTarget& outputTarget, FontHolder& fonts,
-                          Levels::ID level, int score);
+                          Levels::ID level, int score, int hitpoints);
 
     void            update(sf::Time dt);
     void            draw();
 
     CommandQueue&   getCommandQueue();
 
+    bool            isPlayerDead();
     bool            isAnyAsteroidAlive();
 
     void            setLevel(Levels::ID level);
@@ -38,6 +39,8 @@ public:
 
     void            setScore(int score);
     int             getScore() const;
+
+    int             getHitpoints() const;
 
 private:
     void            buildScene();

@@ -82,6 +82,11 @@ void Aircraft::fire()
     mIsFiring = true;
 }
 
+bool Aircraft::isAnimationFinnished()
+{
+    return mExplosion.isFinished();
+}
+
 void Aircraft::drawCurrent(sf::RenderTarget& target,
                          sf::RenderStates states) const
 {

@@ -33,6 +33,7 @@ public:
     float       getDirection() const;
 
     void        fire();
+    bool        isAnimationFinnished();
 
 private:
     virtual void drawCurrent(sf::RenderTarget& target,

@@ -43,7 +43,7 @@ std::vector<AsteroidData> initializeAsteroidData()
 
     data[Asteroid::Fire].speed           = { 50, 100, 140 };
     data[Asteroid::Fire].wrecksCount     = 0;
-    data[Asteroid::Fire].hitpoints       = 50;
+    data[Asteroid::Fire].hitpoints       = 70;
     data[Asteroid::Fire].damage          = 100;
     data[Asteroid::Fire].texture         = Textures::FireAsteroid;
     data[Asteroid::Fire].textureRect     = sf::IntRect(0, 0, 85, 80);

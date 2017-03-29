@@ -4,8 +4,11 @@
 
 GameState::GameState(StateStack &stack, Context context)
     : State(stack, context)
-    , mWorld(*(context.window), *(context.fonts),
-             context.player->getLevel(), context.player->getScore())
+    , mWorld(*(context.window),
+             *(context.fonts),
+             context.player->getLevel(),
+             context.player->getScore(),
+             context.player->getHitpoints())
     , mPlayer(*(context.player))
 {
     mPlayer.setMissionStatus(PlayersInput::MissionRunning);
@@ -21,19 +24,24 @@ bool GameState::update(sf::Time dt)
 {
     mWorld.update(dt);
 
+    if (mWorld.isPlayerDead()) {
+        mPlayer.setMissionStatus(PlayersInput::MissionFailue);
+        requestStackPush(States::Changing);
+    }
     if (!mWorld.isAnyAsteroidAlive()) {
 
         if (mWorld.getLevel() == Levels::Level5) {
             mPlayer.setMissionStatus(PlayersInput::MissionSuccess);
             mPlayer.setLevel(Levels::Level1);
-            mPlayer.setScore(0);
+            mPlayer.setScore(0);            
         }
         else {
             mPlayer.setLevel(static_cast<Levels::ID>(mWorld.getLevel() + 1));
             mPlayer.setScore(mWorld.getScore());
+            mPlayer.setHitpoints(mWorld.getHitpoints() >= 150 ?
+                                            200 : mWorld.getHitpoints() + 50);
         }
 
-        //requestStackPop();
         requestStackPush(States::Changing);
     }
 

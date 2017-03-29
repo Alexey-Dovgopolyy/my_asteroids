@@ -47,6 +47,9 @@ public:
     void            setScore(int score);
     int             getScore() const;
 
+    void            setHitpoints(int points);
+    int             getHitpoints() const;
+
     void            initializeActions();
     bool            isRealtimeAction(Action action);
 
@@ -62,6 +65,7 @@ private:
     std::map<Action, Command>           mActionBinding;
     MissionStatus                       mCurrentMissionStatus;
     Levels::ID                          mLevel;
+    int                                 mHitpoints;
     int                                 mScore;
 };
 
