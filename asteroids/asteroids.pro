@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     emitternode.cpp \
     particlenode.cpp \
     particle.cpp \
-    pausestate.cpp
+    pausestate.cpp \
+    musicplayer.cpp
 
 
 
@@ -77,7 +78,8 @@ HEADERS += \
     emitternode.h \
     particlenode.h \
     particle.h \
-    pausestate.h
+    pausestate.h \
+    musicplayer.h
 
 win32 {
 

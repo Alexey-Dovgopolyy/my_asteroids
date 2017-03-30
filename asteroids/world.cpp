@@ -33,7 +33,7 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
     , mLevelInfo(levelTable[mLevel].rockAsteroidsCount,
                  levelTable[mLevel].iceAsteroidsCount,
                  levelTable[mLevel].fireAsteroidsCount)
-    , mPlayerHP(hitpoints)
+    , mPlayerHP(level == Levels::Level1 ? 200 : hitpoints)
     , mScoredPoints(score)
 {
     loadTextures();

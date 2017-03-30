@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "playersinput.h"
 #include "statestack.h"
+#include "musicplayer.h"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -32,6 +33,7 @@ private:
     FontHolder              mFonts;
     PlayersInput            mPlayersInput;
 
+    MusicPlayer             mMusic;
     StateStack              mStateStack;
 
     sf::Text                mStatisticsText;
