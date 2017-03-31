@@ -1,6 +1,7 @@
 #include "world.h"
 #include "datatable.h"
 #include "particlenode.h"
+#include "soundnode.h"
 
 #include <QDebug>
 #include <algorithm>
@@ -15,12 +16,13 @@ namespace {
     const std::vector<LevelData> levelTable = initializeLevelData();
 }
 
-World::World(sf::RenderTarget &outputTarget, FontHolder &fonts,
+World::World(sf::RenderTarget &outputTarget, FontHolder &fonts, SoundPlayer &sounds,
              Levels::ID level, int score, int hitpoints)
     : mTarget(outputTarget)
     , mWorldView(outputTarget.getDefaultView())
     , mTextures()
     , mFonts(fonts)
+    , mSounds(sounds)
     , mSceneGraph()
     , mSceneLayer()
     , mWorldBounds(-worldMargine, -worldMargine,
@@ -63,6 +65,7 @@ void World::update(sf::Time dt)
     adaptPlayerPosition();
     adaptAstoriodPosition();
 
+    updateSounds();
     //qDebug() << "low" << mSceneLayer[LowerAir]->getChildsCount();
     //qDebug() << "up" << mSceneLayer[UpperAir]->getChildsCount();
 }
@@ -158,6 +161,10 @@ void World::buildScene()
     mPlayerAircraft = playerAircraft.get();
     mSceneLayer[UpperAir]->attachChild(std::move(playerAircraft));
     mPlayerAircraft->setPosition(mSpawnPosition);
+
+    //=====Sounds=====
+    std::unique_ptr<SoundNode> soundNode(new SoundNode(mSounds));
+    mSceneGraph.attachChild(std::move(soundNode));
 
     //=====HP Text=====
     std::string hp = "HP " + std::to_string(mPlayerAircraft->getHitpoints());
@@ -341,7 +348,7 @@ void World::spawnAsteroids(sf::Time dt)
             else if (vy < 100) {
                 vy = 100;
             }
-            asteroid->createParticleEmitter();
+            //asteroid->createParticleEmitter();
         }
 
         asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
@@ -509,7 +516,10 @@ void World::handleCollisions()
     }
 }
 
-
+void World::updateSounds()
+{
+    mSounds.removeStoppedSound();
+}
 
 
 void World::spawnIceAsteroid()
@@ -529,7 +539,7 @@ void World::spawnIceAsteroid()
     int vy = randomInt(100);
     asteroidSpawnVelocity(vx, vy, xSpawn, ySpawn);
     asteroid->setVelocity(static_cast<float>(vx), static_cast<float>(vy));
-    asteroid->createParticleEmitter();
+    //asteroid->createParticleEmitter();
 
     mSceneLayer[MiddleAir]->attachChild(std::move(asteroid));
 }

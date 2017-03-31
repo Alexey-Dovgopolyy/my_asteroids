@@ -6,6 +6,7 @@
 #include "datatable.h"
 #include "animation.h"
 #include "emitternode.h"
+#include "commandqueue.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -38,7 +39,8 @@ public:
     float                   getMaxSpeed() const;
     int                     getDamage() const;
     unsigned int            getSize() const;
-    void                    createParticleEmitter();
+    void                    playLocalSound(CommandQueue& commands,
+                                           SoundEffect::ID effect);
 
     virtual void            remove();
     virtual bool            isMarkedForRemoval() const;
@@ -62,6 +64,7 @@ private:
 
     Animation       mExplosion;
     bool            mShowExplosion;
+    bool            mPlayedExplosionSound;
 
     int             mMaxSpeed;
     int             mDamage;

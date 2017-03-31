@@ -17,8 +17,11 @@ Application::Application()
     , mTextures()
     , mFonts()
     , mPlayersInput(mWindow)
+    , mMusic()
+    , mSounds(mWindow.getSize())
     , mStateStack(State::Context(mWindow, mTextures,
-                                 mFonts, mPlayersInput))
+                                 mFonts, mPlayersInput,
+                                 mMusic, mSounds))
     , mStatisticsText()
     , mStatisticsUpdateTime()
     , mStatisticsNumFrames(0)
@@ -42,8 +45,6 @@ Application::Application()
 
 void Application::run()
 {
-
-
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 

@@ -1,6 +1,7 @@
 #include "asteroid.h"
 #include "resouceholder.h"
 #include "utility.h"
+#include "soundnode.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -18,6 +19,7 @@ Asteroid::Asteroid(Type type, Size size, int speed, const TextureHolder &texture
     , mTextures(textures)
     , mExplosion(textures.get(Textures::Explosion))
     , mShowExplosion(true)
+    , mPlayedExplosionSound(false)
     , mMaxSpeed(Table[type].speed[speed])
     , mDamage(Table[type].damage)
     , mTail(nullptr)
@@ -75,12 +77,22 @@ unsigned int Asteroid::getSize() const
     return mSize;
 }
 
-void Asteroid::createParticleEmitter()
-{
-//    std::unique_ptr<EmitterNode> tail(new EmitterNode(Particle::Tail, getVelocity()));
-//    tail->setPosition(getPosition().x, getPosition().y);
-//    attachChild(std::move(tail));
 
+
+void Asteroid::playLocalSound(CommandQueue& commands,
+                                    SoundEffect::ID effect)
+{
+    sf::Vector2f worldPosition = getWorldPosition();
+
+    Command command;
+    command.category = Category::SoundEffect;
+    command.action = derivedAction<SoundNode>(
+        [effect, worldPosition] (SoundNode& node, sf::Time)
+        {
+            node.playSound(effect, worldPosition);
+        });
+
+    commands.push(command);
 }
 
 void Asteroid::remove()
@@ -101,6 +113,14 @@ void Asteroid::updateCurrent(sf::Time dt, CommandQueue &commands)
         mExplosion.update(dt);
         if (mTail) {
             mTail->setIsDestroyed(true);
+        }
+
+        if (!mPlayedExplosionSound)
+        {
+            SoundEffect::ID soundEffect = (randomInt(2) == 0) ? SoundEffect::Explosion1 : SoundEffect::Explosion2;
+            playLocalSound(commands, soundEffect);
+
+            mPlayedExplosionSound = true;
         }
         return;
     }

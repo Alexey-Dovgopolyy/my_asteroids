@@ -4,6 +4,7 @@
 #include "component.h"
 #include "resourceidentifiers.h"
 #include "state.h"
+#include "soundplayer.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -58,6 +59,7 @@ private:
     sf::Sprite      mSprite;
     sf::Text        mText;
     bool            mIsToggle;
+    SoundPlayer&    mSounds;
 };
 
 }

@@ -1,0 +1,66 @@
+#include "soundplayer.h"
+#include <SFML/Audio/Listener.hpp>
+
+#include <cmath>
+
+
+namespace {
+
+const float ListenerZ = 300.f;
+const float Attenuation = 0.f;
+const float MinDistance2D = 200.f;
+const float MinDistance3D = std::sqrt(MinDistance2D*MinDistance2D +
+                                      ListenerZ*ListenerZ);
+}
+
+SoundPlayer::SoundPlayer(sf::Vector2u windowSize)
+    : mSoundBuffers()
+    , mSounds()
+{
+    mSoundBuffers.load(SoundEffect::AlliedGunfire,	"Media/Sound/AlliedGunfire.wav");
+    mSoundBuffers.load(SoundEffect::Explosion1,		"Media/Sound/Explosion1.wav");
+    mSoundBuffers.load(SoundEffect::Explosion2,		"Media/Sound/Explosion2.wav");
+    mSoundBuffers.load(SoundEffect::Button,			"Media/Sound/Button.wav");
+
+    sf::Listener::setDirection(windowSize.x / 2,
+                               windowSize.y / 2,
+                               -1.f);
+}
+
+void SoundPlayer::play(SoundEffect::ID effect)
+{
+    play(effect, getListenerPosition());
+}
+
+void SoundPlayer::play(SoundEffect::ID effect,
+                       sf::Vector2f position)
+{
+    mSounds.push_back(sf::Sound());
+    sf::Sound& sound = mSounds.back();
+
+    sound.setBuffer(mSoundBuffers.get(effect));
+    sound.setPosition(position.x, -position.y, 0.f);
+    sound.setAttenuation(Attenuation);
+    sound.setMinDistance(MinDistance3D);
+
+    sound.play();
+}
+
+void SoundPlayer::removeStoppedSound()
+{
+    mSounds.remove_if([] (const sf::Sound& s) {
+       return s.getStatus() == sf::Sound::Stopped;
+    });
+}
+
+void SoundPlayer::setListenerPosition(sf::Vector2f position)
+{
+    sf::Listener::setPosition(position.x, -position.y,
+                              ListenerZ);
+}
+
+sf::Vector2f SoundPlayer::getListenerPosition() const
+{
+    sf::Vector3f position = sf::Listener::getPosition();
+    return sf::Vector2f(position.x, -position.y);
+}

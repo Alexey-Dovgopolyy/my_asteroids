@@ -39,7 +39,9 @@ SOURCES += main.cpp \
     particlenode.cpp \
     particle.cpp \
     pausestate.cpp \
-    musicplayer.cpp
+    musicplayer.cpp \
+    soundplayer.cpp \
+    soundnode.cpp
 
 
 
@@ -79,7 +81,9 @@ HEADERS += \
     particlenode.h \
     particle.h \
     pausestate.h \
-    musicplayer.h
+    musicplayer.h \
+    soundplayer.h \
+    soundnode.h
 
 win32 {
 

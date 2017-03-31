@@ -34,6 +34,8 @@ public:
 
     void        fire();
     bool        isAnimationFinnished();
+    void        playLocalSound(CommandQueue& commands,
+                               SoundEffect::ID effect);
 
 private:
     virtual void drawCurrent(sf::RenderTarget& target,
@@ -59,6 +61,7 @@ private:
 
     bool                    mIsFiring;
     bool                    mShowExplosion;
+    bool                    mPlayedExplosionSound;
 
     int                     mFireRateLevel;
     float                   mDirection;

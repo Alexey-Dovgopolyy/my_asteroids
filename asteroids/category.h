@@ -12,6 +12,7 @@ namespace Category {
         FireAsteroid        = 1 << 4,
         AlliedProjectile    = 1 << 5,
         ParticleSystem      = 1 << 6,
+        SoundEffect         = 1 << 7,
 
         Asteroid = RockAsteroid | IceAsteroid | FireAsteroid
     };

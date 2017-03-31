@@ -1,6 +1,7 @@
 #include "aircraft.h"
 #include "commandqueue.h"
 #include "datatable.h"
+#include "soundnode.h"
 
 #include <cmath>
 #include <QDebug>
@@ -20,6 +21,7 @@ Aircraft::Aircraft(Type type, const TextureHolder &textures)
     , mExplosion(textures.get(Textures::Explosion))
     , mIsFiring(false)
     , mShowExplosion(true)
+    , mPlayedExplosionSound(false)
     , mFireRateLevel(1)
     , mDirection(0.f)
 {
@@ -87,6 +89,21 @@ bool Aircraft::isAnimationFinnished()
     return mExplosion.isFinished();
 }
 
+void Aircraft::playLocalSound(CommandQueue& commands,
+                           SoundEffect::ID effect)
+{
+    sf::Vector2f worldPosition = getWorldPosition();
+
+    Command command;
+    command.category = Category::SoundEffect;
+    command.action = derivedAction<SoundNode>(
+            [effect, worldPosition] (SoundNode& node, sf::Time) {
+                node.playSound(effect, worldPosition);
+            });
+
+    commands.push(command);
+}
+
 void Aircraft::drawCurrent(sf::RenderTarget& target,
                          sf::RenderStates states) const
 {
@@ -102,6 +119,12 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 {    
     if (isDestroyed()) {
         mExplosion.update(dt);
+
+        if (!mPlayedExplosionSound){
+            SoundEffect::ID soundEffect = (randomInt(2) == 0) ? SoundEffect::Explosion1 : SoundEffect::Explosion2;
+            playLocalSound(commands, soundEffect);
+            mPlayedExplosionSound = true;
+        }
         return;
     }
 
@@ -115,6 +138,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt,
     if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
 
         commands.push(mFireCommand);
+        playLocalSound(commands, SoundEffect::AlliedGunfire);
         mFireCountdown += sf::seconds(0.5f);
         mIsFiring = false;
     }
@@ -159,16 +183,3 @@ void Aircraft::createProjectile(SceneNode& node,
     projectile->setVelocity(velocity);
     node.attachChild(std::move(projectile));
 }
-
-//void Aircraft::correctBoundingRect()
-//{
-//    float difference = std::abs(mBoundingRect.width - mBoundingRect.height);
-//    if (mBoundingRect.width > mBoundingRect.height) {
-//        mBoundingRect.left -= difference / 2;
-//        mBoundingRect.width -= difference;
-//    }
-//    else {
-//        mBoundingRect.top += difference / 2;
-//        mBoundingRect.height -= difference;
-//    }
-//}

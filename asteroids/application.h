@@ -6,6 +6,7 @@
 #include "playersinput.h"
 #include "statestack.h"
 #include "musicplayer.h"
+#include "soundplayer.h"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -34,6 +35,7 @@ private:
     PlayersInput            mPlayersInput;
 
     MusicPlayer             mMusic;
+    SoundPlayer             mSounds;
     StateStack              mStateStack;
 
     sf::Text                mStatisticsText;

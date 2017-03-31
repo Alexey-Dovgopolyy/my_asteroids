@@ -10,6 +10,7 @@
 #include "asteroid.h"
 #include "category.h"
 #include "textnode.h"
+#include "soundplayer.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Time.hpp>
@@ -24,6 +25,7 @@ class World
 {
 public:
                     World(sf::RenderTarget& outputTarget, FontHolder& fonts,
+                          SoundPlayer& sounds,
                           Levels::ID level, int score, int hitpoints);
 
     void            update(sf::Time dt);
@@ -64,6 +66,7 @@ private:
     void            asteroidSpawnVelocity(int& vx, int& vy,
                                           const int xSpawn, const int ySpawn);
     void            handleCollisions();
+    void            updateSounds();
 
     // some debug functions
     void            spawnIceAsteroid();
@@ -83,6 +86,7 @@ private:
     sf::View                            mWorldView;
     TextureHolder                       mTextures;
     FontHolder&                         mFonts;
+    SoundPlayer&						mSounds;
 
     SceneNode                           mSceneGraph;
     std::array<SceneNode*, LayerCount>  mSceneLayer;

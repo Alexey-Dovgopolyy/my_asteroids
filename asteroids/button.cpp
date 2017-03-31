@@ -15,6 +15,7 @@ Button::Button(State::Context context)
     , mSprite(context.textures->get(Textures::Buttons))
     , mText("", context.fonts->get(Fonts::Main), 16)
     , mIsToggle(false)
+    , mSounds(*(context.sounds))
 {
     changeTexture(Normal);
 
@@ -75,6 +76,8 @@ void Button::activate()
     if (!mIsToggle){
         deactivate();
     }
+
+    mSounds.play(SoundEffect::Button);
 }
 
 void Button::deactivate()

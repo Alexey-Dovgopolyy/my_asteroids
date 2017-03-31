@@ -37,7 +37,10 @@ namespace SoundEffect {
 
     enum ID {
 
-
+        AlliedGunfire,
+        Explosion1,
+        Explosion2,
+        Button,
     };
 }
 
