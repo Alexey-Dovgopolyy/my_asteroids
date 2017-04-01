@@ -161,6 +161,7 @@ void World::buildScene()
     mPlayerAircraft = playerAircraft.get();
     mSceneLayer[UpperAir]->attachChild(std::move(playerAircraft));
     mPlayerAircraft->setPosition(mSpawnPosition);
+    mPlayerAircraft->setHitpoints(mPlayerHP);
 
     //=====Sounds=====
     std::unique_ptr<SoundNode> soundNode(new SoundNode(mSounds));

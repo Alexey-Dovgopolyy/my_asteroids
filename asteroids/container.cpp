@@ -32,8 +32,6 @@ bool Container::isSelectable() const
 
 void Container::handleEvent(const sf::Event& event)
 {    
-
-
     if (event.type == sf::Event::MouseButtonReleased) {
 
         sf::Vector2f mousePos =
@@ -48,7 +46,9 @@ void Container::handleEvent(const sf::Event& event)
                         mChildren[i]->deactivate();
                     }
                     else {
+                        deactivateAll();
                         mActiveChild = static_cast<int>(i);
+                        mSelectedChild = static_cast<int>(i);
                         mChildren[i]->activate();
                     }
                 }
@@ -180,6 +180,16 @@ void Container::selectPrevious()
     } while (!mChildren[prev]->isSelectable());
 
     select(prev);
+}
+
+void Container::deactivateAll()
+{
+    for (Component::Ptr child : mChildren) {
+        mActiveChild = -1;
+        mSelectedChild = -1;
+        child->deselect();
+        child->deactivate();
+    }
 }
 
 }

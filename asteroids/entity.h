@@ -14,6 +14,7 @@ public:
     void            accelerate(float vx, float vy);
     sf::Vector2f    getVelocity();
 
+    void            setHitpoints(int points);
     int             getHitpoints() const;
     int             getScore() const;
     void            repair(int points);

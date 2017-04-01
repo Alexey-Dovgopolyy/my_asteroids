@@ -59,13 +59,7 @@ bool SettingState::handleEvent(const sf::Event &event)
         }
     }
 
-    //if (isKeyBinding) {
-        //updateLabels();
-    //}
-    //else {
-       mGUIContainer.handleEvent(event);
-    //}
-
+    mGUIContainer.handleEvent(event);
     return false;
 }
 

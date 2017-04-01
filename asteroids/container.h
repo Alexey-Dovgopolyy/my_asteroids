@@ -33,6 +33,8 @@ private:
     void selectNext();
     void selectPrevious();
 
+    void deactivateAll();
+
 private:
     std::vector<Component::Ptr>     mChildren;
     int                             mSelectedChild;

@@ -37,6 +37,11 @@ sf::Vector2f Entity::getVelocity()
     return mVelocity;
 }
 
+void Entity::setHitpoints(int points)
+{
+    mHitpoints = points;
+}
+
 int Entity::getHitpoints() const
 {
     return mHitpoints;
