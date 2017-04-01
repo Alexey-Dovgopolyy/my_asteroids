@@ -40,7 +40,6 @@ Aircraft::Aircraft(Type type, const TextureHolder &textures)
     {
         createBullet(node, textures);
     };
-
 }
 
 unsigned int Aircraft::getCategory() const

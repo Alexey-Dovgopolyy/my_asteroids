@@ -3,6 +3,8 @@
 #include "particlenode.h"
 #include "soundnode.h"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+
 #include <QDebug>
 #include <algorithm>
 #include <cmath>
@@ -19,6 +21,7 @@ namespace {
 World::World(sf::RenderTarget &outputTarget, FontHolder &fonts, SoundPlayer &sounds,
              Levels::ID level, int score, int hitpoints)
     : mTarget(outputTarget)
+    , mSceneTexture()
     , mWorldView(outputTarget.getDefaultView())
     , mTextures()
     , mFonts(fonts)
@@ -38,6 +41,9 @@ World::World(sf::RenderTarget &outputTarget, FontHolder &fonts, SoundPlayer &sou
     , mPlayerHP(level == Levels::Level1 ? 200 : hitpoints)
     , mScoredPoints(score)
 {
+    mSceneTexture.create(mTarget.getSize().x,
+                         mTarget.getSize().y);
+
     loadTextures();
     buildScene();
     //spawnIceAsteroid();
@@ -72,8 +78,18 @@ void World::update(sf::Time dt)
 
 void World::draw()
 {
-    mTarget.setView(mWorldView);
-    mTarget.draw(mSceneGraph);
+    if (PostEffect::isSupported()) {
+        mSceneTexture.clear();
+        mSceneTexture.setView(mWorldView);
+        mSceneTexture.draw(mSceneGraph);
+        mSceneTexture.display();
+        mBloomEffect.apply(mSceneTexture, mTarget);
+    }
+    else {
+        mTarget.setView(mWorldView);
+        mTarget.draw(mSceneGraph);
+    }
+
 }
 
 CommandQueue& World::getCommandQueue()

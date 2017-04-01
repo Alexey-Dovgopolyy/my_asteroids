@@ -11,6 +11,7 @@
 #include "category.h"
 #include "textnode.h"
 #include "soundplayer.h"
+#include "bloomeffect.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Time.hpp>
@@ -83,6 +84,7 @@ private:
 
 private:
     sf::RenderTarget&                   mTarget;
+    sf::RenderTexture                   mSceneTexture;
     sf::View                            mWorldView;
     TextureHolder                       mTextures;
     FontHolder&                         mFonts;
@@ -105,6 +107,8 @@ private:
 
     int                                 mPlayerHP;
     int                                 mScoredPoints;
+
+    BloomEffect                         mBloomEffect;
 };
 
 #endif // WORLD_H

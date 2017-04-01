@@ -41,7 +41,9 @@ SOURCES += main.cpp \
     pausestate.cpp \
     musicplayer.cpp \
     soundplayer.cpp \
-    soundnode.cpp
+    soundnode.cpp \
+    posteffect.cpp \
+    bloomeffect.cpp
 
 
 
@@ -83,7 +85,9 @@ HEADERS += \
     pausestate.h \
     musicplayer.h \
     soundplayer.h \
-    soundnode.h
+    soundnode.h \
+    posteffect.h \
+    bloomeffect.h
 
 win32 {
 
