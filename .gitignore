@@ -1,5 +1,6 @@
 #files
 *.pro.user
+*.obj
 
 #directories
 debug/
